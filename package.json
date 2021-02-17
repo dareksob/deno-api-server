@@ -1,0 +1,8 @@
+{
+  "name": "deno-api-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:dareksob/deno-api-server.git",
+  "author": "Darius Sobczak <mail@dsobczak.de>",
+  "license": "MIT"
+}
