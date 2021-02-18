@@ -1,11 +1,18 @@
-import { serve, Server } from "./deps.ts"
+import { EMethod } from './definition/methods.ts';
+import { IServerConfig } from './definition/server-config.ts';
+import { Api } from './services/api.ts';
+import { Route } from './services/route.ts';
 
-const server : Server = serve({ hostname: "0.0.0.0", port: 8080 });
-console.log(`HTTP webserver running.  Access it at:  http://localhost:8080/`);
+const serverConfig : IServerConfig = { 
+  port: 8080
+};
+const api = new Api(serverConfig);
 
-for await (const request of server) {
-  let bodyContent = "Your user-agent is:\n\n";
-  bodyContent += request.headers.get("user-agent") || "Unknown";
+api.addRoute(
+  new Route(EMethod.GET, '/test')
+    .addPipe(async (route: Route) => {
+      
+    })
+);
 
-  request.respond({ status: 200, body: bodyContent });
-}
+await api.listen();
