@@ -1,0 +1,16 @@
+#!/bin/sh
+
+FLAGS="--allow-net --allow-env"
+
+# relative on /src
+
+if [ "$APP_ENV" == "development" ];
+then
+    deno run $FLAGS --unstable --watch src/main.ts
+elif [ "$APP_ENV" == "testing" ];
+then
+    deno test $FLAGS --fail-fast
+else
+    deno run $FLAGS src/main.ts
+fi
+

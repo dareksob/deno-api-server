@@ -1,0 +1,22 @@
+FROM hayd/alpine-deno:1.7.2
+
+ARG CI_TAG
+ARG CI_SHA
+
+# write deployment lock information file
+RUN echo "v$CI_TAG : $CI_SHA" > deployment.lock
+
+WORKDIR /app
+
+# copy di and run cache file
+COPY src/deps.ts .
+RUN deno cache deps.ts
+
+# copy all sources
+COPY . .
+RUN deno cache src/main.ts
+
+EXPOSE 8080
+
+RUN chmod +x etc/bin/start
+ENTRYPOINT ["/bin/sh", "etc/bin/start"]
