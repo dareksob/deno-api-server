@@ -1,4 +1,4 @@
-import { IResponse } from '../definition/types.ts';
+import { IResponse, IStateMap } from '../definition/types.ts';
 import { ServerRequest } from '../deps.ts';
 
 export class Route {
@@ -6,7 +6,8 @@ export class Route {
     protected uriPattern : RegExp; 
     protected pipes : Function[] = [];
 
-    public readonly state = new Map();
+    public readonly params : IStateMap = new Map();
+    public readonly state : IStateMap = new Map();
     public request?: ServerRequest;
     public response?: IResponse;
 
@@ -51,6 +52,8 @@ export class Route {
     public async execute(request: ServerRequest, response: IResponse) {
         this.request = request;
         this.response = response;
+
+        this.params.clear();
         this.state.clear();
 
         for (let pipe in this.pipes) {

@@ -49,6 +49,9 @@ export class Api {
         return message;
     }
 
+    /**
+     * start server listing on requests
+     */
     public async listen() {
         this.server = serve(this.serverConfig);
 
