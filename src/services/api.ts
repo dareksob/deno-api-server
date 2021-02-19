@@ -1,11 +1,13 @@
-import { IServerConfig } from "../definition/server-config.ts";
+import { IServerConfig, IResponse } from "../definition/types.ts";
 import { serve, Server, ServerRequest } from "../deps.ts";
+import { RequestError } from "../errors/request-error.ts";
 import { Route } from "./route.ts";
 
 export class Api {
     protected server: Server | null = null;
     protected routes: Route[] = [];
-    protected serverConfig: IServerConfig;
+
+    public serverConfig: IServerConfig;
 
     constructor(serverConfig: IServerConfig) {
         this.serverConfig = serverConfig;
@@ -20,6 +22,11 @@ export class Api {
         return this;
     }
 
+    /**
+     * resolve route by request
+     * 
+     * @param request 
+     */
     public getRouteByRequest(request: ServerRequest) : null | Route {
         for (let route of this.routes) {
             if (route.method.includes(request.method)) {
@@ -35,15 +42,41 @@ export class Api {
         this.server = serve(this.serverConfig);
 
         for await (const request of this.server) {
-            const route = this.getRouteByRequest(request);
+            const response : IResponse = {
+                status: 200,
+                headers: new Headers()
+            };
 
             try {
+                const route = this.getRouteByRequest(request);
+
                 if (route) {
-                    await route.execute(request);
+                    await route.execute(request, response);
                 } else {
-                    request.respond({ status: 404 });
+                    response.status = 404;
                 }
+                
             } catch (e) {
+                if (e instanceof RequestError) {
+                    response.status = e.status;
+                    response.body = e.message;
+
+                } else {
+                    response.status = 500;
+                    response.body = e.message;
+                }
+            }
+            
+            try {
+                // transform to json
+                if (response.body && typeof response.body !== 'string') {
+                    // @ts-ignore
+                    response.headers.set('Content-Type', 'application/json');
+                    response.body = JSON.stringify(response.body);
+                }
+
+                request.respond(response);
+            } catch(e) {
                 request.respond({ status: 500, body: e.message });
             }
         }

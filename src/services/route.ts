@@ -1,3 +1,4 @@
+import { IResponse } from '../definition/types.ts';
 import { ServerRequest } from '../deps.ts';
 
 export class Route {
@@ -5,9 +6,14 @@ export class Route {
     protected uriPattern : RegExp; 
     protected pipes : Function[] = [];
 
-    protected state = new Map();
-    protected request: ServerRequest | null = null;
+    public state = new Map();
+    public request?: ServerRequest;
+    public response?: IResponse;
 
+    /**
+     * @param method 
+     * @param uri 
+     */
     constructor(method: string[] | string, uri : RegExp | string) {
         if (! Array.isArray(method)) {
             method = [method];
@@ -42,14 +48,13 @@ export class Route {
     /**
      * execute route
      */
-    public async execute(request: ServerRequest) {
+    public async execute(request: ServerRequest, response: IResponse) {
         this.request = request;
+        this.response = response;
         this.state.clear();
 
         for (let pipe in this.pipes) {
-            await this.pipes[pipe](this);
+            await this.pipes[pipe](this, response);
         }
-        
-        request.respond({ status: 200, body: 'super' });
     }
 }

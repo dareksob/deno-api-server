@@ -1,5 +1,6 @@
 services:
     dev:
+        image: deno-api-server
         build:
             context: ../..
             dockerfile: etc/docker/Dockerfile
@@ -12,6 +13,7 @@ services:
             - ../../:/app
 
     test:
+        image: deno-api-server
         build:
             context: ../..
             dockerfile: etc/docker/Dockerfile
