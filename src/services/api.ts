@@ -8,6 +8,7 @@ export class Api {
     protected routes: Route[] = [];
 
     public serverConfig: IServerConfig;
+    public forceJsonResponse = true;
 
     constructor(serverConfig: IServerConfig) {
         this.serverConfig = serverConfig;
@@ -38,6 +39,16 @@ export class Api {
         return null;
     }
 
+    /**
+     * resolve message as default type
+     */
+    private getMessage(message: string) {
+        if (this.forceJsonResponse) {
+            return { message };
+        }
+        return message;
+    }
+
     public async listen() {
         this.server = serve(this.serverConfig);
 
@@ -59,11 +70,11 @@ export class Api {
             } catch (e) {
                 if (e instanceof RequestError) {
                     response.status = e.status;
-                    response.body = e.message;
+                    response.body = this.getMessage(e.message);
 
                 } else {
                     response.status = 500;
-                    response.body = e.message;
+                    response.body = this.getMessage(e.message);
                 }
             }
             
@@ -77,7 +88,10 @@ export class Api {
 
                 request.respond(response);
             } catch(e) {
-                request.respond({ status: 500, body: e.message });
+                request.respond({ 
+                    status: 500, 
+                    body: e.message
+                });
             }
         }
     }
