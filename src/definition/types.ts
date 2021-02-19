@@ -15,4 +15,5 @@ export interface IResponse {
     headers: Headers
  };
 
- //export interface IPipe : () => void;
+export interface IRoute {}
+export type IPipe = (route?: IRoute, response?: Response) => void;

@@ -6,7 +6,7 @@ export class Route {
     protected uriPattern : RegExp; 
     protected pipes : Function[] = [];
 
-    public state = new Map();
+    public readonly state = new Map();
     public request?: ServerRequest;
     public response?: IResponse;
 
