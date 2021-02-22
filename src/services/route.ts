@@ -1,13 +1,15 @@
 import { IResponse, IStateMap } from '../definition/types.ts';
 import { ServerRequest } from '../deps.ts';
+import { IMatcher, UriMatch } from './matcher.ts';
 
 export class Route {
-    protected methods : string[] = [];
-    protected uriPattern : RegExp; 
+    public readonly methods : string[];
+    public readonly matcher : IMatcher; 
     protected pipes : Function[] = [];
 
     public readonly params : IStateMap = new Map();
     public readonly state : IStateMap = new Map();
+    public url?: URL;
     public request?: ServerRequest;
     public response?: IResponse;
 
@@ -15,26 +17,30 @@ export class Route {
      * @param method 
      * @param uri 
      */
-    constructor(method: string[] | string, uri : RegExp | string) {
+    constructor(method: string[] | string, uri : IMatcher | string) {
+        // set methods
         if (! Array.isArray(method)) {
-            method = [method];
+            this.methods = [method];
         }
-
-        if (typeof uri === 'string') {
-            uri = new RegExp(uri);
-        }
-
         this.methods = method.map(m => `${m}`.toUpperCase());
-        this.uriPattern = uri;
+
+        // set uri
+        if (typeof uri === 'string') {
+            this.matcher = new UriMatch(uri);
+        } else {
+            this.matcher = uri;
+        }
     }
 
-    get method() : string[] {
-        return this.methods;
+    public isMatch(url: URL): boolean {
+        const match = this.matcher.getMatch(url);
+        if (match) {
+            
+        }
+
+        return 
     }
 
-    get uri() : RegExp {
-        return this.uriPattern;
-    }
 
     /**
      * add route pipe

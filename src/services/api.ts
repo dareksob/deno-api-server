@@ -14,6 +14,12 @@ export class Api {
         this.serverConfig = serverConfig;
     }
 
+    get host() {
+        const hostname = this.serverConfig.hostname || 'localhost';
+        const port = this.serverConfig.port || 80;
+        return `http://${hostname}:${port}`;
+    }
+
     /**
      * Add route to server stack
      * @param route
@@ -56,6 +62,7 @@ export class Api {
         this.server = serve(this.serverConfig);
 
         for await (const request of this.server) {
+            const url = new URL(request.url, this.host);
             const response : IResponse = {
                 status: 200,
                 headers: new Headers()
