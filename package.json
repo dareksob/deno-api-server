@@ -4,5 +4,8 @@
   "repository": "git@github.com:dareksob/deno-api-server.git",
   "author": "Darius Sobczak <mail@dsobczak.de>",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "scripts": {
+    "postversion": "git push --tag"
+  }
 }
