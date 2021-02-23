@@ -1,60 +1,79 @@
-import { IResponse } from '../definition/types.ts';
+import { IResponse, IPipe, IInjections, IRoute, IContext, IMatcher } from '../definition/types.ts';
 import { ServerRequest } from '../deps.ts';
+import { UriMatch } from './matcher/uri-match.ts';
 
-export class Route {
-    protected methods : string[] = [];
-    protected uriPattern : RegExp; 
+export class Route implements IRoute {
+    public readonly methods : string[];
+    public readonly matcher : IMatcher; 
     protected pipes : Function[] = [];
-
-    public readonly state = new Map();
-    public request?: ServerRequest;
-    public response?: IResponse;
+    public di: IInjections = {};
 
     /**
      * @param method 
      * @param uri 
      */
-    constructor(method: string[] | string, uri : RegExp | string) {
+    constructor(method: string[] | string, uri : IMatcher | string) {
+        // set methods
         if (! Array.isArray(method)) {
             method = [method];
         }
+        this.methods = method.map(m => `${m}`.toUpperCase());
 
+        // set uri
         if (typeof uri === 'string') {
-            uri = new RegExp(uri);
+            this.matcher = new UriMatch(uri);
+        } else {
+            this.matcher = uri;
+        }
+    }
+
+    /**
+     * @param url
+     */
+    public isMatch(url: URL): boolean {
+        const match = this.matcher.getMatch(url);
+        if (match) {
+            return true;
         }
 
-        this.methods = method.map(m => `${m}`.toUpperCase());
-        this.uriPattern = uri;
+        return false;
     }
 
-    get method() : string[] {
-        return this.methods;
-    }
-
-    get uri() : RegExp {
-        return this.uriPattern;
-    }
 
     /**
      * add route pipe
      * 
      * @param pipe 
      */
-    public addPipe(pipe: Function) : Route {
+    public addPipe(pipe: IPipe) : Route {
         this.pipes.push(pipe);
         return this;
     }
 
     /**
-     * execute route
+     * execute all pipes for current request
+     *
+     * @param url
+     * @param request
+     * @param response
      */
-    public async execute(request: ServerRequest, response: IResponse) {
-        this.request = request;
-        this.response = response;
-        this.state.clear();
+    public async execute(url: URL, request: ServerRequest, response: IResponse): Promise<IContext> {
+        const match = this.matcher.getMatch(url);
+
+        const context : IContext = {
+            route: this,
+            di: this.di,
+            match,
+            url,
+            request,
+            response,
+            state: new Map(),
+        }
 
         for (let pipe in this.pipes) {
-            await this.pipes[pipe](this, response);
+            await this.pipes[pipe](context);
         }
+
+        return context;
     }
 }

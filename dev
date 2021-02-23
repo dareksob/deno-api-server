@@ -1,1 +1,14 @@
-docker-compose -f etc/docker/docker-compose.dev.yml $@
+composeFile=./etc/docker/docker-compose.dev.yml
+_cp="docker-compose -f $composeFile"
+
+if [ "$1" == "unit" ]; then
+  $_cp run --rm --entrypoint=sh test
+
+elif [ "$1" == "rebuild" ]; then
+    $_cp pull
+    $_cp build
+    $_cp up -d
+
+else
+  $_cp $@
+fi
