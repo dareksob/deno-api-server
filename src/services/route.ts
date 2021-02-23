@@ -1,6 +1,7 @@
 import { IResponse, IPipe, IInjections, IRoute, IContext, IMatcher } from '../definition/types.ts';
 import { ServerRequest } from '../deps.ts';
 import { UriMatch } from './matcher/uri-match.ts';
+import { RequestError } from '../errors/request-error.ts';
 
 export class Route implements IRoute {
     public readonly methods : string[];
@@ -25,6 +26,11 @@ export class Route implements IRoute {
         } else {
             this.matcher = uri;
         }
+    }
+
+    public injections(di: IInjections) : Route {
+        this.di = di;
+        return this;
     }
 
     /**
@@ -60,20 +66,24 @@ export class Route implements IRoute {
     public async execute(url: URL, request: ServerRequest, response: IResponse): Promise<IContext> {
         const match = this.matcher.getMatch(url);
 
-        const context : IContext = {
-            route: this,
-            di: this.di,
-            match,
-            url,
-            request,
-            response,
-            state: new Map(),
-        }
+        if (match) {
+            const context: IContext = {
+                route: this,
+                di: this.di,
+                match,
+                url,
+                request,
+                response,
+                state: new Map(),
+            }
 
-        for (let pipe in this.pipes) {
-            await this.pipes[pipe](context);
-        }
+            for (let pipe in this.pipes) {
+                await this.pipes[pipe](context);
+            }
 
-        return context;
+            return context;
+        } else {
+            throw new RequestError('Route cannot execute on invalid match');
+        }
     }
 }

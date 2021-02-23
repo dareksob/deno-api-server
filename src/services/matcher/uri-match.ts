@@ -11,7 +11,8 @@ export class UriMatch implements IMatcher {
         if (this.uri == url.pathname) {
             return {
                 url,
-                uri: this.uri
+                uri: this.uri,
+                params: new Map(),
             };
         }
 

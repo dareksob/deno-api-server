@@ -24,7 +24,7 @@ export interface IResponse {
 export interface IRoute {}
 
 export interface IMatch {
-    params?: IStateMap;
+    params: IStateMap;
     url: URL;
     uri: string;
     matches?: RegExpMatchArray,
@@ -38,7 +38,6 @@ export interface IMatcher {
 
 export interface IKeyDescribe {
     type?: any,
-    optional?: boolean,
     key?: string,
     transform?: Function,
 }
@@ -50,7 +49,7 @@ export interface IKeyDescribes {
 export interface IContext {
     route: IRoute,
     di: IInjections,
-    match: IMatching,
+    match: IMatch,
     url: URL,
     request: ServerRequest
     response: IResponse,
