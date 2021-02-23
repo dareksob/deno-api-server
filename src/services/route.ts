@@ -1,17 +1,12 @@
-import { IResponse, IStateMap } from '../definition/types.ts';
+import { IResponse, IPipe, IInjections, IRoute, IContext, IMatcher } from '../definition/types.ts';
 import { ServerRequest } from '../deps.ts';
-import { IMatcher, UriMatch } from './matcher.ts';
+import { UriMatch } from './matcher/uri-match.ts';
 
-export class Route {
+export class Route implements IRoute {
     public readonly methods : string[];
     public readonly matcher : IMatcher; 
     protected pipes : Function[] = [];
-
-    public readonly params : IStateMap = new Map();
-    public readonly state : IStateMap = new Map();
-    public url?: URL;
-    public request?: ServerRequest;
-    public response?: IResponse;
+    public di: IInjections = {};
 
     /**
      * @param method 
@@ -20,7 +15,7 @@ export class Route {
     constructor(method: string[] | string, uri : IMatcher | string) {
         // set methods
         if (! Array.isArray(method)) {
-            this.methods = [method];
+            method = [method];
         }
         this.methods = method.map(m => `${m}`.toUpperCase());
 
@@ -32,13 +27,16 @@ export class Route {
         }
     }
 
+    /**
+     * @param url
+     */
     public isMatch(url: URL): boolean {
         const match = this.matcher.getMatch(url);
         if (match) {
-            
+            return true;
         }
 
-        return 
+        return false;
     }
 
 
@@ -47,23 +45,35 @@ export class Route {
      * 
      * @param pipe 
      */
-    public addPipe(pipe: Function) : Route {
+    public addPipe(pipe: IPipe) : Route {
         this.pipes.push(pipe);
         return this;
     }
 
     /**
-     * execute route
+     * execute all pipes for current request
+     *
+     * @param url
+     * @param request
+     * @param response
      */
-    public async execute(request: ServerRequest, response: IResponse) {
-        this.request = request;
-        this.response = response;
+    public async execute(url: URL, request: ServerRequest, response: IResponse): Promise<IContext> {
+        const match = this.matcher.getMatch(url);
 
-        this.params.clear();
-        this.state.clear();
+        const context : IContext = {
+            route: this,
+            di: this.di,
+            match,
+            url,
+            request,
+            response,
+            state: new Map(),
+        }
 
         for (let pipe in this.pipes) {
-            await this.pipes[pipe](this, response);
+            await this.pipes[pipe](context);
         }
+
+        return context;
     }
 }

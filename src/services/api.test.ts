@@ -14,12 +14,6 @@ Deno.test('Api should get route by match', () => {
     const testRoute = new Route('GET', '/test');
     api.addRoute(testRoute);
 
-    const testRoute2 = new Route('POST', /^\/get\/([0-9]+)/);
-    assertEquals(
-        api, 
-        api.addRoute(testRoute2)
-    );
-
     // should be functional
     assertEquals('function', typeof api.getRouteByRequest);
 
@@ -27,15 +21,4 @@ Deno.test('Api should get route by match', () => {
     assertEquals(testRoute, api.getRouteByRequest(
         mockRequest('GET', '/test')
     ));
-
-    // resolve by regexp
-    assertEquals(testRoute2, api.getRouteByRequest(
-        mockRequest('POST', '/get/122')
-    ));
-
-    // resolve null
-    assertEquals(null, api.getRouteByRequest(
-        mockRequest('PATCH', '/get/2323')
-    ));
-    
 });

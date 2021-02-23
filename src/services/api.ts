@@ -29,15 +29,23 @@ export class Api {
         return this;
     }
 
+
+    getUrlByRequest(request: ServerRequest) : URL {
+        return new URL(request.url, this.host);
+    }
+
     /**
      * resolve route by request
      * 
      * @param request 
+     * @param {URL|null} url
      */
-    public getRouteByRequest(request: ServerRequest) : null | Route {
+    public getRouteByRequest(request: ServerRequest, url?: URL) : null | Route {
+        url = url || this.getUrlByRequest(request);
+
         for (let route of this.routes) {
-            if (route.method.includes(request.method)) {
-                if (route.uri.test(request.url)) {
+            if (route.methods.includes(request.method)) {
+                if (route.isMatch(url)) {
                     return route;
                 }
             }
@@ -62,17 +70,17 @@ export class Api {
         this.server = serve(this.serverConfig);
 
         for await (const request of this.server) {
-            const url = new URL(request.url, this.host);
+            const url = this.getUrlByRequest(request);
             const response : IResponse = {
                 status: 200,
                 headers: new Headers()
             };
 
             try {
-                const route = this.getRouteByRequest(request);
+                const route = this.getRouteByRequest(request, url);
 
                 if (route) {
-                    await route.execute(request, response);
+                    await route.execute(url, request, response);
                 } else {
                     response.status = 404;
                 }

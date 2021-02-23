@@ -1,64 +1,5 @@
-
-import { IStateMap } from '../definition/types.ts';
-
-
-interface IMatch {
-    params?: IStateMap;
-    url: URL;
-    uri: string;
-    matches?: RegExpMatchArray,
-}
-
-type IMaching = IMatch | null;
-
-export interface IMatcher {
-    getMatch(url: URL) : IMaching; 
-};
-
-export class UriMatch implements IMatcher {
-    public readonly uri: string;
-
-    constructor (uri: string) {
-        this.uri = uri;
-    }
-    
-    public getMatch(url: URL) : IMaching {
-        if (this.uri == url.pathname) {
-            return {
-                url,
-                uri: this.uri
-            };
-        }
-
-        return null;
-    }
-}
-
-
-interface IKeyDescribe {
-    type?: any,
-    optional?: boolean,
-    key?: string,
-    transform?: Function,
-}
-
-interface IKeyDescribes {
-    [key: string]: IKeyDescribe
-}
-
-const PATTERN_MAP = new Map<any, any>();
-PATTERN_MAP.set('Any', {
-    pattern: '([a-zA-Z0-9.\\-_]+)',
-    transform: (v: string) => v,
-});
-PATTERN_MAP.set(Number, {
-    pattern: '([0-9]+|[0-9]+.[0-9]+)',
-    transform: (v: string) => parseFloat(v)
-});
-PATTERN_MAP.set('Int', {
-    pattern: '(\d+)',
-    transform: (v: string) => parseInt(v)
-});
+import { IStateMap, IMatching, IMatcher, IKeyDescribes } from '../../definition/types.ts';
+import { patternMap } from '../../definition/pattern-map.ts';
 
 export class KeyMatch implements IMatcher {
     public readonly uri: string;
@@ -75,20 +16,29 @@ export class KeyMatch implements IMatcher {
             const item = describe[key];
             const itemKey = `:${key}`;
 
-            item.type = PATTERN_MAP.has(item.type) ? item.type : 'Any';
-            const keyPattern = PATTERN_MAP.get(item.type);
-            item.key = itemKey;
-            item.transform = keyPattern.transform;
-            
-            pattern = pattern.replace(itemKey, keyPattern.pattern); 
+            item.type = patternMap.has(item.type) ? item.type : 'Any';
+            const keyPattern = patternMap.get(item.type);
+
+            if (keyPattern) {
+                item.key = itemKey;
+                item.transform = keyPattern.transform;
+
+                pattern = pattern.replace(itemKey, keyPattern.pattern);
+            }
+
             this.keyGroups.push(key);
         }
 
         this.pattern = new RegExp(`^${pattern}$`);
 
     }
-    
-    public getMatch(url: URL): IMaching {
+
+    /**
+     * match url by complex pattern
+     *
+     * @param url
+     */
+    public getMatch(url: URL): IMatching {
         const { pathname } = url;
         const matches = this.pattern.exec(pathname);
 

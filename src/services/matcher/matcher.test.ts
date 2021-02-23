@@ -1,5 +1,6 @@
-import { assertEquals, assertNotEquals } from '../dev_deps.ts';
-import { UriMatch, KeyMatch } from './matcher.ts';
+import { assertEquals, assertNotEquals } from '../../dev_deps.ts';
+import { UriMatch } from './uri-match.ts';
+import { KeyMatch } from './key-match.ts';
 
 const host = 'http://localhost';
 Deno.test('UriMatch for basic match', () => {
@@ -22,7 +23,6 @@ Deno.test('UriMatch for basic match', () => {
         '/test'
     );
 });
-
 
 Deno.test('KeyMatch key match by typeing', () => {
     const url = new URL('/test/23/sdsd', host);
