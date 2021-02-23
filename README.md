@@ -1,5 +1,5 @@
 # deno-api-server
-An http/rest api server for deno. Based on std http library of deno and use the concept of functional programming for your endpoint definitions.
+An http/rest api server for deno. Based on std deno http library and use the concept of functional programming for your endpoint definitions.
 
 `Status` WIP, please wait for the first release ;-)
 
