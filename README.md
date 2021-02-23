@@ -1,15 +1,12 @@
 # deno-api-server
 An http/rest api server for deno. Based on std http library of deno and use the concept of functional programming for your endpoint definitions.
 
-`Status` WIP
-
-Project WIP, please wait for the first release ;-)
-
+`Status` WIP, please wait for the first release ;-)
 
 ## Basic functionality example
 
 ````typescript
-import { Api, Route, EMethod } from "https://deno.land/x/deno-api-server/src/mod.ts";
+import { Api, Route, EMethod } from "https://deno.land/x/deno_api_server@v{TAG_VERSION}/mod.ts";
 
 const api = new Api({ port: 8080 });
 
@@ -27,8 +24,6 @@ await api.listen();
 
 ### Add simple route to your api
 ```typescript
-import { Route, EMethod } from "https://deno.land/x/deno-api-server/src/mod.ts";
-
 /** INFO: don't forget route to your Api, see first example **/
 new Route(EMethod.GET, '/say-hello')
     .addPipe(({response}) => {
@@ -39,8 +34,6 @@ new Route(EMethod.GET, '/say-hello')
 
 ### Add simple route with multi methods
 ```typescript
-import { Route, EMethod } from "https://deno.land/x/deno-api-server/src/mod.ts";
-
 /** INFO: don't forget route to your Api, see first example **/
 new Route([EMethod.GET, EMethod.POST], '/say-hello')
     .addPipe(({response, request}) => {
@@ -50,8 +43,6 @@ new Route([EMethod.GET, EMethod.POST], '/say-hello')
 
 ### Use state to pass data between pipes
 ```typescript
-import { Route, EMethod } from "https://deno.land/x/deno-api-server/src/mod.ts";
-
 /** INFO: don't forget route to your Api, see first example **/
 new Route(EMethod.GET, '/state')
     .addPipe(({response, state}) => {
@@ -69,8 +60,6 @@ new Route(EMethod.GET, '/state')
 
 ### Throw error to handle by api
 ```typescript
-import { Route, EMethod } from "https://deno.land/x/deno-api-server/src/mod.ts";
-
 /** INFO: don't forget route to your Api, see first example **/
 new Route(EMethod.GET, '/error')
     .addPipe(() => {
@@ -175,6 +164,15 @@ new KeyMatch('/get/:id', { id: { type: Number } }) => not match: /get/hello
 - `Number` for float and numbers
 - `'Int'` for integer numbers 
 
-## links
 
+## Quick test api server
+```typescript
+import "https://deno.land/x/deno_api_server@v0.0.2/example.ts";
+/**
+ * will start server on localhost:8080
+ * try all entpoints on example
+ **/
+```
+
+## links
 [deno](https://deno.land)

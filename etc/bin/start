@@ -1,7 +1,7 @@
 #!/bin/sh
 
 FLAGS="--allow-net --allow-env"
-MAIN="run.ts"
+MAIN="example.ts"
 
 # relative on /src
 

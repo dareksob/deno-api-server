@@ -1,5 +1,5 @@
 // deno-lint-ignore no-explicit-any
-import {EMethod, IServerConfig, Api, Route, RequestError, KeyMatch } from './src/mod.ts';
+import {EMethod, IServerConfig, Api, Route, RequestError, KeyMatch } from './mod.ts';
 
 const serverConfig: IServerConfig = {
     port: 8080
