@@ -14,7 +14,6 @@ RUN deno cache deps.ts
 
 # copy all sources
 COPY . .
-RUN deno cache src/main.ts
 
 EXPOSE 8080
 
