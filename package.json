@@ -6,6 +6,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "preversion": "git push",
     "postversion": "git push --tag"
   }
 }
