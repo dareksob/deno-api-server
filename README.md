@@ -3,10 +3,13 @@ An http/rest api server for deno. Based on std deno http library and use the con
 
 `Status` WIP, please wait for the first release ;-)
 
+- [API Documentation](https://doc.deno.land/https/deno.land/x/deno_api_server/mod.ts)
+- [Preset API Documentation](https://doc.deno.land/https/deno.land/x/deno_api_server/src/presets/mod.ts)
+
 ## Basic functionality example
 
 ````typescript
-import { Api, Route, EMethod } from "https://deno.land/x/deno_api_server@v{TAG_VERSION}/mod.ts";
+import { Api, Route, EMethod } from "https://deno.land/x/deno_api_server/mod.ts";
 
 const api = new Api({ port: 8080 });
 
@@ -173,6 +176,16 @@ import "https://deno.land/x/deno_api_server@v0.0.2/example.ts";
  * try all entpoints on example
  **/
 ```
+
+## List of presets
+[Preset API Documentation](https://doc.deno.land/https/deno.land/x/deno_api_server/src/presets/mod.ts)
+
+All presets defined in `src/presets` 
+
+### Route presets `src/presets/routes/*`
+
+- `healthz` GET|HEAD /healthz for healthcheck
+- `status` GET /status similar to healthcheck but customizable definitions, see API DOC
 
 ## links
 [deno](https://deno.land)

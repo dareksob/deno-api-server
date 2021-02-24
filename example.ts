@@ -1,5 +1,7 @@
 // deno-lint-ignore no-explicit-any
 import {EMethod, IServerConfig, Api, Route, RequestError, KeyMatch } from './mod.ts';
+import statusRoute from './src/presets/routes/status.ts';
+import healthzRoute from './src/presets/routes/healthz.ts';
 
 const serverConfig: IServerConfig = {
     port: 8080
@@ -7,6 +9,11 @@ const serverConfig: IServerConfig = {
 const api = new Api(serverConfig);
 
 api
+    // add presets
+    .addRoute(statusRoute)
+    .addRoute(healthzRoute)
+
+    // custom
     .addRoute(
         new Route(EMethod.GET, '/')
             .addPipe(({response}) => {
