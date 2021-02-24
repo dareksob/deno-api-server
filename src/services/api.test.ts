@@ -5,11 +5,14 @@ import { mockRequest } from '../dev_mod.ts';
 
 Deno.test('Api should be constructable', () => {
     const api = new Api({ port: 80 });
-    assertEquals(true, api instanceof Api);
+    assertEquals(api instanceof Api, true);
+    assertEquals(api.serverConfig.port, 80);
+    assertEquals(api.serverConfig.hostname, undefined);
 });
 
 Deno.test('Api should get route by match', () => {
-    const api = new Api({ port: 80 });
+    const api = new Api({ port: 8080 });
+    assertEquals(api.serverConfig.port, 8080);
 
     const testRoute = new Route('GET', '/test');
     api.addRoute(testRoute);
