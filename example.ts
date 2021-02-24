@@ -1,7 +1,9 @@
 // deno-lint-ignore no-explicit-any
-import {EMethod, IServerConfig, Api, Route, RequestError, KeyMatch } from './mod.ts';
+import {EMethod, IServerConfig, Api, Route, RequestError, KeyMatch} from './mod.ts';
+
 import statusRoute from './src/presets/routes/status.ts';
 import healthzRoute from './src/presets/routes/healthz.ts';
+import jsonBodyPipe from './src/presets/pipes/body/json-body.pipe.ts';
 
 const serverConfig: IServerConfig = {
     port: 8080
@@ -27,7 +29,19 @@ api
     .addRoute(
         new Route([EMethod.GET, EMethod.POST], '/mixed-hello')
             .addPipe(({response, request}) => {
-                response.body = { message: `Hello API by ${request.method}` };
+                response.body = {message: `Hello API by ${request.method}`};
+            })
+    )
+
+    .addRoute(
+        new Route([EMethod.POST], '/body/json')
+            .addPipe(jsonBodyPipe)
+            .addPipe(({response, state}) => {
+                response.body = {
+                    message: `Hello API json body`,
+                    body: state.get('body'),
+                    bodyType: state.get('bodyType')
+                };
             })
     )
 
@@ -35,13 +49,13 @@ api
         new Route([EMethod.GET, EMethod.POST], new KeyMatch(
             '/get-by-key-name/:id/:name',
             {
-                id: { type: Number },
+                id: {type: Number},
                 name: {}
             }
         ))
             .addPipe(({response, match}) => {
-                const { params } = match;
-                response.body = { message: `You call with keymatch`, id: params.get('id'), name: params.get('name') };
+                const {params} = match;
+                response.body = {message: `You call with keymatch`, id: params.get('id'), name: params.get('name')};
             })
     )
 
@@ -54,14 +68,13 @@ api
                     setTimeout(resolve, 1000);
                 })
             })
-            .addPipe( ({response, state}) => {
+            .addPipe(({response, state}) => {
                 response.body = {
                     message: 'Wait a while',
                     begin: state.get('begin'),
                     end: new Date()
                 };
             })
-
     )
 
     // example with simple json
@@ -86,7 +99,6 @@ api
                 throw new RequestError('I dont like', 400);
             })
     )
-
 
 
 console.log(`Start server localhost:${api.serverConfig.port}`);

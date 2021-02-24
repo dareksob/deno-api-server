@@ -187,5 +187,37 @@ All presets defined in `src/presets`
 - `healthz` GET|HEAD /healthz for healthcheck
 - `status` GET /status similar to healthcheck but customizable definitions, see API DOC
 
+
+### Pipes presets `src/presets/pipes/*`
+
+#### `body/raw-body.pipe.ts`
+Read body data of request.
+
+Set state `body` with string data
+Set state `bodyType` with the type of data == raw
+
+````typescript
+route
+    .addPipe(rawBodyPipe)
+    .addPipe(({ state } : IContext )=> {
+        const anyBody = state.get('body');
+    }); 
+````
+
+#### `body/json-body.pipe.ts`
+Try to parse json data of request body. Otherwise throw 400 error.
+
+Set state `body` with json data
+Set state `bodyType` with the type of data == json
+
+````typescript
+route
+    .addPipe(jsonBodyPipe)
+    .addPipe(({ state } : IContext )=> {
+        const validJsonBody = state.get('body');
+    }); 
+````
+
+
 ## links
 [deno](https://deno.land)
