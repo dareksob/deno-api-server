@@ -4,6 +4,7 @@ import {EMethod, IServerConfig, Api, Route, RequestError, KeyMatch} from './mod.
 import statusRoute from './src/presets/routes/status.ts';
 import healthzRoute from './src/presets/routes/healthz.ts';
 import jsonBodyPipe from './src/presets/pipes/body/json-body.pipe.ts';
+import redirectPipe from './src/presets/pipes/process/redirect.pipe.ts';
 
 const serverConfig: IServerConfig = {
     port: 8080
@@ -24,6 +25,18 @@ api
     )
     .addRoute(
         new Route(EMethod.HEAD, '/')
+    )
+
+    // redirect example
+    .addRoute(
+        new Route(EMethod.GET, '/redirect')
+            .addPipe(redirectPipe('/redirect-target?name=flex'))
+    )
+    .addRoute(
+        new Route(EMethod.GET, '/redirect-target')
+            .addPipe(({response, url}) => {
+                response.body = {message: 'Hello API Redirect', name: url.searchParams.get('name') || 'not-set'};
+            })
     )
 
     .addRoute(

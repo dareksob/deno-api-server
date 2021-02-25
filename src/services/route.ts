@@ -1,7 +1,7 @@
 import { IResponse, IPipe, IInjections, IRoute, IContext, IMatcher } from '../definition/types.ts';
 import { ServerRequest } from '../deps.ts';
 import { UriMatch } from './matcher/uri-match.ts';
-import { RequestError } from '../errors/request-error.ts';
+import { RequestError } from '../errors/request.error.ts';
 
 export class Route implements IRoute {
     public readonly methods : string[];

@@ -5,4 +5,4 @@ export { Route } from './src/services/route.ts';
 export { KeyMatch, UriMatch } from './src/services/matcher/mod.ts';
 
 /** errors **/
-export { RequestError, NotFoundError } from "./src/errors/mod.ts";
+export { RequestError, NotFoundError, AccessDeniedError } from "./src/errors/mod.ts";
