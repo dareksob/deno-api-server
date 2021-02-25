@@ -1,6 +1,6 @@
 import { IServerConfig, IResponse } from "../definition/types.ts";
 import { serve, Server, ServerRequest } from "../deps.ts";
-import { RequestError } from "../errors/request-error.ts";
+import { RequestError } from "../errors/request.error.ts";
 import { Route } from "./route.ts";
 
 export class Api {

@@ -1,5 +1,5 @@
 import {IContext} from '../../../definition/types.ts';
-import {RequestError} from '../../../errors/request-error.ts';
+import {RequestError} from '../../../errors/request.error.ts';
 import rawBodyPipe from './raw-body.pipe.ts';
 
 

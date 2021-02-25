@@ -1,5 +1,7 @@
 import { ServerRequest } from '../deps.ts';
 
+export type IRequest = ServerRequest;
+
 export interface IServerConfig {
     hostname?: string, 
     port: number
