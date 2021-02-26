@@ -1,4 +1,4 @@
-# deno-api-server
+# deno-api-server (hourglass)
 An http/rest api server for deno. Based on std deno http library and use the concept of functional programming for your endpoint definitions.
 
 `Status` WIP, please wait for the first release ;-)

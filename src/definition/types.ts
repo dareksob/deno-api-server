@@ -23,7 +23,16 @@ export interface IResponse {
     headers: Headers
  }
 
-export interface IRoute {}
+export interface IRoute {
+    methods : string[];
+    matcher : IMatcher;
+    di: IInjections;
+    parent?: any;
+
+    isMatch(url: URL): boolean;
+    addPipe(pipe: IPipe) : IRoute;
+    execute(url: URL, request: ServerRequest, response: IResponse): Promise<IContext>;
+}
 
 export interface IMatch {
     params: IStateMap;
@@ -35,6 +44,7 @@ export interface IMatch {
 export type IMatching = IMatch | null;
 
 export interface IMatcher {
+    readonly uri: string;
     getMatch(url: URL) : IMatching;
 }
 

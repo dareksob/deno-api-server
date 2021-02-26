@@ -5,11 +5,21 @@ import statusRoute from './src/presets/routes/status.ts';
 import healthzRoute from './src/presets/routes/healthz.ts';
 import jsonBodyPipe from './src/presets/pipes/body/json-body.pipe.ts';
 import redirectPipe from './src/presets/pipes/process/redirect.pipe.ts';
+import {EEvent} from "./src/definition/event.ts";
+import RouteEvent from "./src/definition/events/route.event.ts";
 
 const serverConfig: IServerConfig = {
     port: 8080
 };
 const api = new Api(serverConfig);
+
+// try to use global event stack
+addEventListener(EEvent.API_ADD_ROUTE, (event) => {
+    if (event instanceof RouteEvent) {
+        const { route } = <RouteEvent> event;
+        console.log(`Add Route ${route.methods.join(',')} ${route.matcher.uri}`);
+    }
+});
 
 api
     // add presets

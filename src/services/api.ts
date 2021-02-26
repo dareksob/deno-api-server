@@ -1,14 +1,16 @@
-import { IServerConfig, IResponse } from "../definition/types.ts";
+import {IServerConfig, IResponse, IRoute, IStateMap} from "../definition/types.ts";
 import { serve, Server, ServerRequest } from "../deps.ts";
 import { RequestError } from "../errors/request.error.ts";
-import { Route } from "./route.ts";
+import {EEvent} from "../definition/event.ts";
+import RouteEvent from "../definition/events/route.event.ts";
 
 export class Api {
     protected server: Server | null = null;
-    protected routes: Route[] = [];
+    protected routes: IRoute[] = [];
 
     public serverConfig: IServerConfig;
     public forceJsonResponse = true;
+    public readonly props : IStateMap = new Map();
 
     constructor(serverConfig: IServerConfig) {
         this.serverConfig = serverConfig;
@@ -24,7 +26,11 @@ export class Api {
      * Add route to server stack
      * @param route
      */
-    public addRoute(route: Route) : Api {
+    public addRoute(route: IRoute) : Api {
+        route.parent = this;
+
+        dispatchEvent(new RouteEvent(EEvent.API_ADD_ROUTE, route));
+
         this.routes.push(route);
         return this;
     }
@@ -40,7 +46,7 @@ export class Api {
      * @param request 
      * @param {URL|null} url
      */
-    public getRouteByRequest(request: ServerRequest, url?: URL) : null | Route {
+    public getRouteByRequest(request: ServerRequest, url?: URL) : null | IRoute {
         url = url || this.getUrlByRequest(request);
 
         for (let route of this.routes) {

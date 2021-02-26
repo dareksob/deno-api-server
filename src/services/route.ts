@@ -5,9 +5,10 @@ import { RequestError } from '../errors/request.error.ts';
 
 export class Route implements IRoute {
     public readonly methods : string[];
-    public readonly matcher : IMatcher; 
+    public readonly matcher : IMatcher;
     protected pipes : Function[] = [];
     public di: IInjections = {};
+    public parent?: any;
 
     /**
      * @param method 
@@ -51,7 +52,7 @@ export class Route implements IRoute {
      * 
      * @param pipe 
      */
-    public addPipe(pipe: IPipe) : Route {
+    public addPipe(pipe: IPipe) : IRoute {
         this.pipes.push(pipe);
         return this;
     }
