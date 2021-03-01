@@ -1,47 +1,59 @@
-// deno-lint-ignore no-explicit-any
-import {EMethod, IServerConfig, Api, Route, RequestError, KeyMatch} from './mod.ts';
+/**
+ * Main example file to see how it works
+ */
+import {EMethod, IServerConfig, Api, Route, RequestError, KeyMatch} from '../mod.ts';
 
-import statusRoute from './src/presets/routes/status.ts';
-import healthzRoute from './src/presets/routes/healthz.ts';
-import jsonBodyPipe from './src/presets/pipes/body/json-body.pipe.ts';
-import redirectPipe from './src/presets/pipes/process/redirect.pipe.ts';
-import {EEvent} from "./src/definition/event.ts";
-import RouteEvent from "./src/definition/events/route.event.ts";
+import statusRoute from '../src/presets/routes/status.ts';
+import healthzRoute from '../src/presets/routes/healthz.ts';
+import jsonBodyPipe from '../src/presets/pipes/body/json-body.pipe.ts';
+import redirectPipe from '../src/presets/pipes/process/redirect.pipe.ts';
+import {EEvent} from "../src/definition/event.ts";
+import RouteEvent from "../src/definition/events/route.event.ts";
 
-const serverConfig: IServerConfig = {
-    port: 8080
-};
+const serverConfig: IServerConfig = {port: 8080};
 const api = new Api(serverConfig);
 
-// try to use global event stack
+/**
+ * use global event to get information of regist routes
+ */
 addEventListener(EEvent.API_ADD_ROUTE, (event) => {
     if (event instanceof RouteEvent) {
-        const { route } = <RouteEvent> event;
+        const {route} = <RouteEvent>event;
         console.log(`Add Route ${route.methods.join(',')} ${route.matcher.uri}`);
     }
 });
 
 api
-    // add presets
+    // add preset route for status info
     .addRoute(statusRoute)
+
+    // add preset route for healthcheck, similar to statusRoute but without body
     .addRoute(healthzRoute)
 
-    // custom
+    // simple example to response hello for get request
     .addRoute(
         new Route(EMethod.GET, '/')
             .addPipe(({response}) => {
                 response.body = {message: 'Hello API'};
             })
     )
+
+    // simple example for 200 on head requests
     .addRoute(
         new Route(EMethod.HEAD, '/')
     )
 
-    // redirect example
+    /**
+     * use redirect preset to send redirection
+     *
+     * @preset redirectPipe
+     */
     .addRoute(
         new Route(EMethod.GET, '/redirect')
             .addPipe(redirectPipe('/redirect-target?name=flex'))
     )
+
+    // the target route on redirect
     .addRoute(
         new Route(EMethod.GET, '/redirect-target')
             .addPipe(({response, url}) => {
@@ -49,6 +61,7 @@ api
             })
     )
 
+    // simple example to mix method on one route
     .addRoute(
         new Route([EMethod.GET, EMethod.POST], '/mixed-hello')
             .addPipe(({response, request}) => {
@@ -56,33 +69,48 @@ api
             })
     )
 
+    /**
+     * simple example integration for json body process
+     *
+     * @preset jsonBodyPipe
+     */
     .addRoute(
         new Route([EMethod.POST], '/body/json')
             .addPipe(jsonBodyPipe)
             .addPipe(({response, state}) => {
                 response.body = {
                     message: `Hello API json body`,
-                    body: state.get('body'),
-                    bodyType: state.get('bodyType')
+                    body: state.get('body'), // get json body, created by jsonBodyPipe
+                    bodyType: state.get('bodyType') // created on jsonBodyPipe
                 };
             })
     )
 
+    // more complex example to use url params
     .addRoute(
-        new Route([EMethod.GET, EMethod.POST], new KeyMatch(
-            '/get-by-key-name/:id/:name',
-            {
-                id: {type: Number},
-                name: {}
-            }
-        ))
+        new Route([EMethod.GET, EMethod.POST],
+            // use the key matcher
+            new KeyMatch(
+                // define params
+                '/get-by-key-name/:id/:name',
+
+                // and describe uri params
+                {
+                    id: {type: Number},
+                    name: {}
+                }
+            ))
             .addPipe(({response, match}) => {
                 const {params} = match;
-                response.body = {message: `You call with keymatch`, id: params.get('id'), name: params.get('name')};
+                response.body = {
+                    message: `You call with keymatch`,
+                    id: params.get('id'),
+                    name: params.get('name')
+                };
             })
     )
 
-    // all promisses
+    // test example for long delay, all pipes support promisses
     .addRoute(
         new Route(EMethod.GET, '/wait')
             .addPipe(async ({response, state}) => {
@@ -100,7 +128,9 @@ api
             })
     )
 
-    // example with simple json
+    /**
+     * example to you multi pipes and pass data
+     */
     .addRoute(
         new Route(EMethod.GET, '/state')
             .addPipe(({response, state}) => {
@@ -115,7 +145,8 @@ api
                 })
             })
     )
-    // example with error
+
+    // simple example with error, always use request error to safe secure error handling
     .addRoute(
         new Route(EMethod.GET, '/error')
             .addPipe(() => {
@@ -123,6 +154,6 @@ api
             })
     )
 
-
+// start listen
 console.log(`Start server localhost:${api.serverConfig.port}`);
 await api.listen();

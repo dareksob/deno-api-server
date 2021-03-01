@@ -119,7 +119,7 @@ export class Api {
         }
 
         if ( typeof body === 'object') {
-            Object.assign(body, { message });
+            Object.assign(body, typeof message === 'object' ? message : { message });
         } else {
             body = message;
         }

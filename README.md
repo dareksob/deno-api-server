@@ -1,4 +1,4 @@
-# deno-api-server (hourglass)
+# deno-api-server
 An http/rest api server for deno. Based on std deno http library and use the concept of functional programming for your endpoint definitions.
 
 `Status` WIP, please wait for the first release ;-)
@@ -242,6 +242,18 @@ route
     })
 ````
 
+## examples
+See `example` folder for more use case examples. 
+
+### Third party examples are
+
+#### example/body-validation.ts
+Use validasaur to validate your json body
+[validasaur deno.land](https://deno.land/x/validasaur)
+
+#### example/authentification-jwt.ts
+Use djwt to handle and secure your endpoints, a very simple example to customize your process
+[validasaur deno.land](https://deno.land/x/djwt)
 
 ## links
 [deno](https://deno.land)

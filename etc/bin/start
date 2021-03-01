@@ -1,7 +1,18 @@
 #!/bin/sh
 
 FLAGS="--allow-net --allow-env"
-MAIN="example.ts"
+MAIN="example/main.ts"
+
+# user custom execute of example apis
+if [ "$example" != "" ]; then
+  examplePath="example/$example.ts";
+
+  if [ -f $examplePath ] ; then
+    MAIN=$examplePath;
+  else
+    echo "WARN example file $examplePath not exists, by name $example";
+  fi
+fi
 
 # relative on /src
 
