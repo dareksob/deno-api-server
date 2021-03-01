@@ -1,11 +1,10 @@
-export class RequestError {
+export class RequestError extends Error {
     public readonly status: number;
-    public readonly message: string;
     public readonly prevent: Error | undefined;
 
     constructor(message: string, status: number = 500, prevent?: Error) {
+        super(message);
         this.status = status;
-        this.message = message;
         this.prevent = prevent;
     }
 }

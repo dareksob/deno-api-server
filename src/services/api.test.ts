@@ -1,7 +1,8 @@
 import { assertEquals } from '../dev_deps.ts';
 import { Api } from './api.ts';
 import { Route } from './route.ts'; 
-import { mockRequest } from '../dev_mod.ts';
+import {mockRequest, mockResponse, mockApi, MockApi } from '../dev_mod.ts';
+import {IResponse} from "../definition/types.ts";
 
 Deno.test('Api should be constructable', () => {
     const api = new Api({ port: 80 });
@@ -24,4 +25,25 @@ Deno.test('Api should get route by match', () => {
     assertEquals(testRoute, api.getRouteByRequest(
         mockRequest('GET', '/test')
     ));
+});
+
+
+Deno.test('Api should handleError', () => {
+    class UnitApi extends MockApi {
+        public execHandleError(response: IResponse, error: Error) {
+            this.handleError(response, error);
+        }
+    }
+    const api = new UnitApi({ port: 80 });
+    const response : IResponse = mockResponse();
+
+    api.execHandleError(response, new Error('any'));
+    assertEquals(response.status, 500);
+    assertEquals(response.body, { message: 'any' });
+
+
+    const response2 : IResponse = mockResponse();
+    api.execHandleError(response, new Request('any'));
+    assertEquals(response.status, 500);
+    assertEquals(response.body, { message: 'any' });
 });

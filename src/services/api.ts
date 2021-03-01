@@ -60,16 +60,6 @@ export class Api {
     }
 
     /**
-     * resolve message as default type
-     */
-    private getMessage(message: string) {
-        if (this.forceJsonResponse) {
-            return { message };
-        }
-        return message;
-    }
-
-    /**
      * start server listing on requests
      */
     public async listen() {
@@ -92,14 +82,7 @@ export class Api {
                 }
                 
             } catch (e) {
-                if (e instanceof RequestError) {
-                    response.status = e.status;
-                    response.body = this.getMessage(e.message);
-
-                } else {
-                    response.status = 500;
-                    response.body = this.getMessage(e.message);
-                }
+                this.handleError(response, e);
             }
             
             try {
@@ -118,5 +101,29 @@ export class Api {
                 });
             }
         }
+    }
+
+    protected handleError(response: IResponse, error: Error) {
+        let body = response.body;
+        let message : string | Object = error.message;
+
+        if (this.forceJsonResponse) {
+            message = { message };
+        }
+
+        if (error instanceof RequestError) {
+            response.status = error.status;
+
+        } else {
+            response.status = 500;
+        }
+
+        if ( typeof body === 'object') {
+            Object.assign(body, { message });
+        } else {
+            body = message;
+        }
+
+        response.body = body;
     }
 }

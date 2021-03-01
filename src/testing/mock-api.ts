@@ -4,7 +4,7 @@ import {mockResponse} from "./mock-response.ts";
 import {RequestError} from "../errors/request.error.ts";
 import {mockRequest} from "../dev_mod.ts";
 
-class MockApi extends Api {
+export class MockApi extends Api {
     static readonly HOST = 'http://localhost';
     public lastRoute?: IRoute | null;
     public lastContext?: IContext | null;
@@ -34,8 +34,10 @@ class MockApi extends Api {
     }
 }
 
-export default function mockApi(route: IRoute): MockApi {
+export default function mockApi(route?: IRoute): MockApi {
     const api = new MockApi({port: 80});
-    api.addRoute(route);
+    if (route) {
+        api.addRoute(route);
+    }
     return api;
 }
