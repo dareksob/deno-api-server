@@ -1,7 +1,7 @@
 import { assertEquals } from '../dev_deps.ts';
 import { Route } from './route.ts';
 import { UriMatch } from './matcher/uri-match.ts';
-import { mockRequest, mockFn } from '../dev_mod.ts';
+import { mockRequest, mockFn } from '../../dev_mod.ts';
 
 const host = 'http://localhost';
 

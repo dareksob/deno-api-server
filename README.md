@@ -242,8 +242,47 @@ route
     })
 ````
 
+## Testing
+Use buildin mocks to create a api request.
+
+[Build-In](https://deno.land/x/deno_api_server/dev_mod.ts)
+
+A simple example
+`````typescript
+import { mockApi } from 'https://deno.land/x/deno_api_server/dev_mod.ts';
+
+Deno.test('Example mockApi route success request', async () => {
+    const route = new Route('GET', '/hello');
+
+    // create api
+    const api = mockApi(route);
+
+    await api.sendByArguments('GET', '/hello');
+
+    assertEquals(api.lastRoute === route, true);
+    assertEquals(api?.lastContext?.response.status, 200);
+})
+`````
+
+More examples in `example/unit-testing.test.ts`
+
+
+## Best Practice
+Tips and best practice to use this server.
+
+- Write custom and small pipes to reuse
+- create a custom createRoute function to setup your app
+- use Route.di / Route.injections to share services and other stuff
+- create factory functions for injections, like getConnection factory to connect to database only if route will execute
+- write test by mock your injections (like mock service for your database connection)
+- use state to pass data between your pipes
+
+
 ## examples
-See `example` folder for more use case examples. 
+See `example` folder for more use case examples.
+
+#### `example/unit-testing.test.ts`
+route and api testing example and how to use build-in mock functions.
 
 ### Third party examples are
 

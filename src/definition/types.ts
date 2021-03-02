@@ -63,7 +63,7 @@ export interface IContext {
     di: IInjections,
     match: IMatch,
     url: URL,
-    request: ServerRequest
+    request: IRequest
     response: IResponse,
     state: IStateMap,
 }

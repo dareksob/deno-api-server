@@ -2,7 +2,7 @@ import { assertEquals } from '../dev_deps.ts';
 import { Api } from './api.ts';
 import { Route } from './route.ts';
 import { RequestError } from '../../mod.ts';
-import {mockRequest, mockResponse, MockApi } from '../dev_mod.ts';
+import {mockRequest, mockResponse, MockApi } from '../../dev_mod.ts';
 import {IResponse} from "../definition/types.ts";
 
 Deno.test('Api should be constructable', () => {
@@ -28,7 +28,6 @@ Deno.test('Api should get route by match', () => {
     ));
 });
 
-
 Deno.test('Api should handleError', () => {
     class UnitApi extends MockApi {
         public execHandleError(response: IResponse, error: Error) {
@@ -44,7 +43,7 @@ Deno.test('Api should handleError', () => {
 
 
     const response2 : IResponse = mockResponse();
-    api.execHandleError(response, new RequestError('any'));
-    assertEquals(response.status, 500);
-    assertEquals(response.body, { message: 'any' });
+    api.execHandleError(response2, new RequestError('any'));
+    assertEquals(response2.status, 500);
+    assertEquals(response2.body, { message: 'any' });
 });

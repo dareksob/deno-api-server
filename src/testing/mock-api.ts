@@ -1,20 +1,40 @@
 import {Api} from '../services/api.ts';
-import {IContext, IRequest, IRoute, IServerConfig} from "../definition/types.ts";
+import {
+    IContext, IInjections,
+    IRequest,
+    IResponse,
+    IRoute,
+    IServerConfig,
+} from "../definition/types.ts";
 import {mockResponse} from "./mock-response.ts";
 import {RequestError} from "../errors/request.error.ts";
-import {mockRequest} from "../dev_mod.ts";
+import {mockRequest} from "../../dev_mod.ts";
+import {ServerRequest} from "../deps.ts";
+
+interface IErrorContext {
+    url: URL,
+    request: IRequest
+    response: IResponse,
+}
 
 export class MockApi extends Api {
     static readonly HOST = 'http://localhost';
     public lastRoute?: IRoute | null;
-    public lastContext?: IContext | null;
+    public lastContext?: IContext | IErrorContext | null;
+
+    private injections : IInjections = {};
 
     constructor(serverConfig: IServerConfig) {
         super(serverConfig);
     }
 
+    public mockInjections(injectsions: IInjections) : MockApi {
+        this.injections = injectsions;
+        return this;
+    }
+
     public sendByArguments(method: string, uri: string | URL) {
-        const pathname = uri instanceof URL ? uri.pathname : `uri`;
+        const pathname = uri instanceof URL ? uri.pathname : `${uri}`;
         const request = mockRequest(method, pathname);
         return this.sendByRequest(request);
     }
@@ -26,10 +46,25 @@ export class MockApi extends Api {
         const route = this.getRouteByRequest(request, url);
         this.lastRoute = route;
 
-        if (route) {
-            this.lastContext = await route.execute(url, request, response);
-        } else {
-            throw new RequestError('Not found', 404);
+        try {
+            if (route) {
+                const currentInjections = { ...route.di };
+                Object.assign(route.di, this.injections);
+
+                this.lastContext = await route.execute(url, request, response);
+
+                route.di = currentInjections;
+
+            } else {
+                throw new RequestError('Not found', 404);
+            }
+        } catch (e) {
+            this.handleError(response, e);
+            this.lastContext = {
+                url,
+                request,
+                response,
+            }
         }
     }
 }
