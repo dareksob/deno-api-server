@@ -2,11 +2,11 @@
  * example how to test your api
  */
 
-import { assertEquals, assertThrowsAsync } from "https://deno.land/std/testing/asserts.ts";
-import {RequestError, Route} from '../mod.ts';
+import { assertEquals, assertNotEquals, assertThrowsAsync } from "https://deno.land/std/testing/asserts.ts";
+import {IContext, RequestError, Route} from '../mod.ts';
 
 // use build-in mocks
-import { mockApi, mockRequest, mockResponse } from '../dev_mod.ts';
+import { mockApi, mockRequest, mockResponse, mockContext } from '../dev_mod.ts';
 
 /**
  * example to testing routes by simple response
@@ -141,3 +141,20 @@ Deno.test('Example mockApi route to mock injections', async () => {
     assertEquals(api.lastRoute === route, true);
     assertEquals(api?.lastContext?.response.body, ['mocked']);
 });
+
+
+/**
+ * example how you can test your custom pipes
+ */
+Deno.test('Example for testing custom pipes', async () => {
+    const myPipe = (context: IContext) => {
+        context.response.headers.set('custom', 'xxxx');
+    };
+
+    const context = mockContext();
+    assertNotEquals(context.response.headers.get('custom'), 'xxx');
+
+    await myPipe(context);
+
+    assertEquals(context.response.headers.get('custom'), 'xxx');
+})
