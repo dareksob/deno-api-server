@@ -151,10 +151,10 @@ Deno.test('Example for testing custom pipes', async () => {
         context.response.headers.set('custom', 'xxxx');
     };
 
-    const context = mockContext();
-    assertNotEquals(context.response.headers.get('custom'), 'xxx');
+    const context = mockContext({}); // @see mock-context.ts#ISetting
+    assertEquals(context.response.headers.get('custom'), null);
 
     await myPipe(context);
 
-    assertEquals(context.response.headers.get('custom'), 'xxx');
+    assertEquals(context.response.headers.get('custom'), 'xxxx');
 })

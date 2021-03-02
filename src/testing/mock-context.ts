@@ -32,9 +32,14 @@ export function mockContext(setting: ISetting) : IContext {
     return {
         route,
         di: route.di,
-        match: {},
+        match: {
+            params: new Map(),
+            url: new URL(uri, 'http://localhost'),
+            uri,
+            matches: [],
+        },
         url: new URL(uri, 'http://localhost'),
-        request: mockRequest(route.methods, uri),
+        request: mockRequest(setting?.method || route.methods[0], uri),
         response: mockResponse(),
         state: setting?.state || new Map(),
     }
