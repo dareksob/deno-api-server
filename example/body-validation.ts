@@ -11,6 +11,9 @@ const api = new Api({port: 8080});
 import statusRoute from '../src/presets/routes/status.ts';
 import jsonBodyPipe from '../src/presets/pipes/body/json-body.pipe.ts';
 
+// add basic status route
+api.addRoute(statusRoute);
+
 /**
  * use validasaur library for validation of body
  */
