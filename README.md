@@ -1,8 +1,6 @@
 # deno-api-server
 An http/rest api server for deno. Based on std deno http library and use the concept of functional programming for your endpoint definitions.
 
-`Status` WIP, please wait for the first release ;-)
-
 - [API Documentation](https://doc.deno.land/https/deno.land/x/deno_api_server/mod.ts)
 - [Preset API Documentation](https://doc.deno.land/https/deno.land/x/deno_api_server/src/presets/mod.ts)
 - [Testing API Documentation](https://doc.deno.land/https/deno.land/x/deno_api_server/dev_mod.ts)
@@ -264,6 +262,32 @@ Deno.test('Example mockApi route success request', async () => {
     assertEquals(api.lastRoute === route, true);
     assertEquals(api?.lastContext?.response.status, 200);
 })
+`````
+
+A payload example
+`````typescript
+import { mockApi, mockRequest } from 'https://deno.land/x/deno_api_server/dev_mod.ts';
+
+Deno.test('Example mockApi post request with request data', async () => {
+    const route = new Route('POST', '/submit');
+    route
+        .addPipe(jsonBodyPipe)
+        .addPipe(({state, response}) => {
+            response.status = 201;
+            response.body = state.get('body');
+        });
+
+    const api = mockApi(route);
+
+    const request = mockRequest('POST', '/submit', {
+        name: 'super'
+    });
+    await api.sendByRequest(request);
+
+    assertEquals(api.lastRoute === route, true);
+    assertEquals(api?.lastContext?.response.status, 201);
+    assertEquals(api?.lastContext?.response.body, { name: 'super' });
+});
 `````
 
 More examples in `example/unit-testing.test.ts`

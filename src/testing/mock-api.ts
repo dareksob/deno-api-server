@@ -9,7 +9,6 @@ import {
 import {mockResponse} from "./mock-response.ts";
 import {RequestError} from "../errors/request.error.ts";
 import {mockRequest} from "../../dev_mod.ts";
-import {ServerRequest} from "../deps.ts";
 
 interface IErrorContext {
     url: URL,
