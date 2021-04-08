@@ -34,10 +34,7 @@ function bodyValidationPipe(schema: ValidationRules) {
     return async ({ state, response }: IContext) => {
         const body = state.get('body'); // will be set by jsonBodyPipe
 
-        const [ passes, errors ] = await validate(body, {
-            name: required,
-            age: [required, isNumber]
-        });
+        const [ passes, errors ] = await validate(body, schema);
 
         if (!passes) {
             // add validation property for more details

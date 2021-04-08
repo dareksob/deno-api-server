@@ -33,12 +33,25 @@ export class MockApi extends Api {
         return this;
     }
 
-    public sendByArguments(method: string, uri: string | URL) {
+    /**
+     * shorthand function
+     *
+     * @param method
+     * @param uri
+     * @param data
+     */
+    public sendByArguments(method: string, uri: string | URL, data: any = undefined) {
         const pathname = uri instanceof URL ? uri.pathname : `${uri}`;
-        const request = mockRequest(method, pathname);
+        const request = mockRequest(method, pathname, data);
         return this.sendByRequest(request);
     }
 
+    /**
+     * request send method
+     *
+     * @param request
+     * @param url
+     */
     public async sendByRequest(request: IRequest, url?: URL) {
         url = url instanceof URL ? url : new URL(request.url, MockApi.HOST);
 

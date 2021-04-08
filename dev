@@ -1,3 +1,5 @@
+#/bin/bash
+
 composeFile=./etc/docker/docker-compose.dev.yml
 _cp="docker-compose -f $composeFile"
 
