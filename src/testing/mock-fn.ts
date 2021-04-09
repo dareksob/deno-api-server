@@ -4,7 +4,18 @@
  */
 export function mockFn(implementation: Function = () => {}) {
     const mock = {
-        calls: []
+        _fn: implementation,
+        clear() {
+          this.returns.length = 0;
+          this.calls.length = 0;
+          return this;
+        },
+        implement(fn: Function = () => {}) {
+            this._fn = fn;
+            return this;
+        },
+        calls: [],
+        returns: [],
     };
 
     //@ts-ignore
@@ -12,7 +23,10 @@ export function mockFn(implementation: Function = () => {}) {
         //@ts-ignore
         mock.calls.push(args);
         //@ts-ignore
-        return implementation.apply(null, args);
+        const result = mock._fn.apply(null, args);
+        //@ts-ignore
+        mock.returns.push(result);
+        return result;
     }
 
     fn.mock = mock;
