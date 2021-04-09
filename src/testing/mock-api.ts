@@ -73,6 +73,7 @@ export class MockApi extends Api {
         } catch (e) {
             this.handleError(response, e);
             this.lastContext = {
+                error: e,
                 url,
                 request,
                 response,
