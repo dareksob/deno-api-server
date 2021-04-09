@@ -20,6 +20,7 @@ export class MockApi extends Api {
     static readonly HOST = 'http://localhost';
     public lastRoute?: IRoute | null;
     public lastContext?: IContext | IErrorContext | null;
+    public lastError?: string | Error;
 
     private injections : IInjections = {};
 
@@ -72,8 +73,8 @@ export class MockApi extends Api {
             }
         } catch (e) {
             this.handleError(response, e);
+            this.lastError = e;
             this.lastContext = {
-                error: e,
                 url,
                 request,
                 response,
