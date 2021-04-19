@@ -22,6 +22,14 @@ then
 elif [ "$APP_ENV" == "testing" ];
 then
     deno test $FLAGS --fail-fast
+
+elif [ "$APP_ENV" == "unit" ];
+then
+    cm="deno test $FLAGS --fail-fast"
+    echo 'alias dt="'$cm'"' >> /root/.profile
+    eval $cm
+    echo "Use 'dt' to rerun test or"
+    sh -l
 else
     deno run $FLAGS $MAIN
 fi

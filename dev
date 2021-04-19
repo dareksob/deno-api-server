@@ -4,7 +4,7 @@ composeFile=./etc/docker/docker-compose.dev.yml
 _cp="docker-compose -f $composeFile"
 
 if [ "$1" == "unit" ]; then
-  $_cp run --rm --entrypoint=sh test
+  $_cp run --rm -e APP_ENV=unit test
 
 elif [ "$1" == "rebuild" ]; then
     $_cp pull
