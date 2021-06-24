@@ -4,6 +4,7 @@ An http/rest api server for deno. Based on std deno http library and use the con
 - [API Documentation](https://doc.deno.land/https/deno.land/x/deno_api_server/mod.ts)
 - [Preset API Documentation](https://doc.deno.land/https/deno.land/x/deno_api_server/src/presets/mod.ts)
 - [Testing API Documentation](https://doc.deno.land/https/deno.land/x/deno_api_server/dev_mod.ts)
+- [Breaking Changes](./breaking-changes.md)
 
 ## Basic functionality example
 
