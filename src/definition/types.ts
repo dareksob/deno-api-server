@@ -1,5 +1,7 @@
 import { ServerRequest } from '../deps.ts';
 
+export { EPatternTypes } from './pattern-map.ts';
+
 export type IRequest = ServerRequest;
 
 export interface IServerConfig {
@@ -69,3 +71,8 @@ export interface IContext {
 }
 
 export type IPipe = (context: IContext) => void;
+
+export interface IPatternDescribe {
+    pattern: string,
+    transform: (v: string) => any,
+}

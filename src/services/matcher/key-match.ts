@@ -1,5 +1,6 @@
-import { IStateMap, IMatching, IMatcher, IKeyDescribes } from '../../definition/types.ts';
-import { patternMap } from '../../definition/pattern-map.ts';
+import { IStateMap, IMatching, IMatcher, IKeyDescribes, IPatternDescribe } from '../../definition/types.ts';
+import { patternMap, EPatternTypes } from '../../definition/pattern-map.ts';
+import {IllegalArgumentError} from "../../errors/illegal-argument.error.ts";
 
 export class KeyMatch implements IMatcher {
     public readonly uri: string;
@@ -16,21 +17,22 @@ export class KeyMatch implements IMatcher {
             const item = describe[key];
             const itemKey = `:${key}`;
 
-            item.type = patternMap.has(item.type) ? item.type : 'Any';
-            const keyPattern = patternMap.get(item.type);
+            item.type = patternMap.has(item.type) ? item.type : EPatternTypes.ANY;
 
-            if (keyPattern) {
-                item.key = itemKey;
-                item.transform = keyPattern.transform;
-
-                pattern = pattern.replace(itemKey, keyPattern.pattern);
-            }
+            const keyPattern = patternMap.get(item.type) as IPatternDescribe;
+            item.key = itemKey;
+            item.transform = keyPattern.transform;
+            pattern = pattern.replace(itemKey, keyPattern.pattern);
 
             this.keyGroups.push(key);
         }
 
-        this.pattern = new RegExp(`^${pattern}$`);
+        // throw error if uri have some other pattern
+        if (/\:[a-zA-Z]/.test(pattern)) {
+            throw new IllegalArgumentError('Missing some uri parameter');
+        }
 
+        this.pattern = new RegExp(`^${pattern}$`);
     }
 
     /**
