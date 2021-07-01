@@ -1,6 +1,6 @@
 #!/bin/sh
 
-FLAGS="--allow-net --allow-env"
+FLAGS="--allow-net --allow-env --allow-read"
 MAIN="example/main.ts"
 
 # user custom execute of example apis

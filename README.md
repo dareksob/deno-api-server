@@ -24,6 +24,12 @@ console.log(`Start server localhost:${api.serverConfig.port}`);
 await api.listen();
 ````
 
+## Last Feature implementations
+- add file handling
+- add functionality for breaking pipe process
+- add new example to handle files [File example](https://deno.land/x/deno_api_server/example/static-file.ts)
+
+## More code examples
 
 ### Add simple route to your api
 ```typescript
@@ -158,9 +164,16 @@ new KeyMatch('/get/:id', { id: {} }) => match: /get/1, params: { id: '1' }
 new KeyMatch('/get/:id', { id: {} }) => match: /get/hello-my, params: { id: 'hello-my' }
 
 // with transpile type
-new KeyMatch('/get/:id', { id: { type: Number } }) => match: /get/1, params: { id: 1 }
-new KeyMatch('/get/:id', { id: { type: Number } }) => not match: /get/hello
+new KeyMatch('/get/:id', { id: { type: 'number' } }) => match: /get/1, params: { id: 1 }
+new KeyMatch('/get/:id', { id: { type: 'number' } }) => not match: /get/hello
+
+// with rest type
+new KeyMatch('/get/:path', { path: { type: 'rest' } }) => match /get/super-dup/megaman, params: { path: 'super-dup/megaman' }
 ````
+
+### Info for KeyMatch
+Use `EPatternTypes` for param type or you can extend it with extendPatternMap function.
+See `src/definition/pattern-map.ts`
 
 ### IKeyDescribe.type
 - `'Any'` for any parameter like string, number and combination

@@ -1,4 +1,4 @@
-import {IContext, IPipe} from "../../../definition/types.ts";
+import {BreakPipe, IContext, IPipe} from "../../../definition/types.ts";
 
 export default function redirectPipe(url: string | URL, status: number = 302, referrer?: string | URL, ) : IPipe  {
     return ({ response } : IContext) => {
@@ -9,5 +9,7 @@ export default function redirectPipe(url: string | URL, status: number = 302, re
         }
 
         response.status = status;
+
+        return BreakPipe;
     }
 }

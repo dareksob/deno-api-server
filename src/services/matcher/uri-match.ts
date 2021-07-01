@@ -12,7 +12,7 @@ export class UriMatch implements IMatcher {
             return {
                 url,
                 uri: this.uri,
-                params: new Map(),
+                params: new Map<string, any>(),
             };
         }
 

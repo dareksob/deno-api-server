@@ -3,6 +3,7 @@ import { serve, Server, ServerRequest } from "../deps.ts";
 import { RequestError } from "../errors/request.error.ts";
 import {EEvent} from "../definition/event.ts";
 import RouteEvent from "../definition/events/route.event.ts";
+import {Raw} from "./raw.ts";
 
 export class Api {
     protected server: Server | null = null;
@@ -67,7 +68,7 @@ export class Api {
 
         for await (const request of this.server) {
             const url = this.getUrlByRequest(request);
-            const response : IResponse = {
+            let response : IResponse = {
                 status: 200,
                 headers: new Headers()
             };
@@ -76,7 +77,8 @@ export class Api {
                 const route = this.getRouteByRequest(request, url);
 
                 if (route) {
-                    await route.execute(url, request, response);
+                    const context = await route.execute(url, request, response);
+                    response = context.response;
                 } else {
                     response.status = 404;
                 }
@@ -86,11 +88,17 @@ export class Api {
             }
             
             try {
-                // transform to json
-                if (response.body && typeof response.body !== 'string') {
-                    // @ts-ignore
-                    response.headers.set('Content-Type', 'application/json');
-                    response.body = JSON.stringify(response.body);
+                if (response.body) {
+                    // pass raw content body
+                    if (response.body instanceof Raw) {
+                        response.body = response.body.body;
+                    }
+                    // auto transform to json
+                    else if (typeof response.body !== 'string' && ! response.headers.has('Content-Type')) {
+                        // @ts-ignore
+                        response.headers.set('Content-Type', 'application/json');
+                        response.body = JSON.stringify(response.body);
+                    }
                 }
 
                 request.respond(response);

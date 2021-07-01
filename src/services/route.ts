@@ -1,4 +1,4 @@
-import { IResponse, IPipe, IInjections, IRoute, IContext, IMatcher } from '../definition/types.ts';
+import {IResponse, IPipe, IInjections, IRoute, IContext, IMatcher, BreakPipe} from '../definition/types.ts';
 import { ServerRequest } from '../deps.ts';
 import { UriMatch } from './matcher/uri-match.ts';
 import { RequestError } from '../errors/request.error.ts';
@@ -75,11 +75,16 @@ export class Route implements IRoute {
                 url,
                 request,
                 response,
-                state: new Map(),
+                state: new Map<string, any>(),
             }
 
             for (let pipe in this.pipes) {
-                await this.pipes[pipe](context);
+                const feedback = await this.pipes[pipe](context);
+
+                // break pipe execute if command return
+                if (feedback === BreakPipe) {
+                    break;
+                }
             }
 
             return context;

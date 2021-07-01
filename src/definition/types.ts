@@ -23,7 +23,12 @@ export interface IResponse {
     message?: string,
     body?: any,
     headers: Headers
- }
+}
+
+export interface IPipeResponse {
+    context: IContext
+    response: IResponse,
+}
 
 export interface IRoute {
     methods : string[];
@@ -76,3 +81,5 @@ export interface IPatternDescribe {
     pattern: string,
     transform: (v: string) => any,
 }
+
+export const BreakPipe = Symbol('BreakPipe');
