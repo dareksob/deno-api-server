@@ -1,4 +1,3 @@
-import { IllegalArgumentError } from '../errors/illegal-argument.error.ts';
 import { IPatternDescribe } from './types.ts';
 
 export enum EPatternTypes {
@@ -6,6 +5,7 @@ export enum EPatternTypes {
     INT = 'Int',
     NUMBER = 'Number',
     ALPHA = 'Alpha',
+    HASH = 'Hash',
     REST = 'Rest'
 }
 
@@ -32,22 +32,12 @@ patternMap.set(EPatternTypes.ALPHA, {
     transform: (v: string) => v,
 });
 
+patternMap.set(EPatternTypes.HASH, {
+    pattern: '([a-zA-Z0-9]+)',
+    transform: (v: string) => v,
+});
+
 patternMap.set(EPatternTypes.REST, {
     pattern: '(.*)$',
     transform: (v: string) => v,
 });
-
-/**
- * function to extend pattern map for key match
- *
- * @param {TPattern} key
- * @param {IPatternDescribe} describe
- * @throws IllegalArgumentError
- */
-export function extendPatternMap(key: TPattern, describe: IPatternDescribe) {
-    if (patternMap.has(key)) {
-        throw new IllegalArgumentError(`Key ${key} for PatternMap already defined`);
-    }
-
-    patternMap.set(key, describe);
-}

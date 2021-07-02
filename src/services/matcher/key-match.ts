@@ -1,6 +1,18 @@
-import { IStateMap, IMatching, IMatcher, IKeyDescribes, IPatternDescribe } from '../../definition/types.ts';
-import { patternMap, EPatternTypes } from '../../definition/pattern-map.ts';
+import {
+    IKeyDescribes,
+    IMatcher,
+    IMatching,
+    IPatternDescribe,
+    IStateMap
+} from '../../definition/types.ts';
+import {EPatternTypes, patternMap} from '../../definition/pattern-map.ts';
 import {IllegalArgumentError} from "../../errors/illegal-argument.error.ts";
+
+function assertType(value: any, type: string, msg: string) {
+    if (!value || typeof value !== type) {
+        throw new IllegalArgumentError(msg);
+    }
+}
 
 export class KeyMatch implements IMatcher {
     public readonly uri: string;
@@ -16,10 +28,32 @@ export class KeyMatch implements IMatcher {
         for (const key in describe) {
             const item = describe[key];
             const itemKey = `:${key}`;
+            let keyPattern: IPatternDescribe;
 
-            item.type = patternMap.has(item.type) ? item.type : EPatternTypes.ANY;
+            // resolve key pattern for matching
+            if (item.describe && typeof item.describe === 'object') {
+                keyPattern = item.describe as IPatternDescribe;
 
-            const keyPattern = patternMap.get(item.type) as IPatternDescribe;
+                if (!item.type) {
+                    item.type = 'custom';
+                }
+            }
+            else if (typeof item.type === 'string' && patternMap.has(item.type)) {
+                keyPattern = patternMap.get(item.type) as IPatternDescribe;
+            }
+            else {
+                item.type = EPatternTypes.ANY;
+                keyPattern = patternMap.get(EPatternTypes.ANY) as IPatternDescribe;
+            }
+
+            // validate pattern
+            assertType(keyPattern.pattern, 'string', 'Invalid pattern')
+            assertType(keyPattern.transform, 'function', 'Invalid transform')
+
+            if (/\(/.test(keyPattern.pattern)) {
+                console.warn('Warning, pattern not define a group');
+            }
+
             item.key = itemKey;
             item.transform = keyPattern.transform;
             pattern = pattern.replace(itemKey, keyPattern.pattern);

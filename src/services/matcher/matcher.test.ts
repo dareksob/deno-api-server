@@ -75,6 +75,24 @@ Deno.test('KeyMatch key match throw missing keys', () => {
   })
 })
 
+Deno.test('KeyMatch can resolve any ', () => {
+  const matcher = new KeyMatch('/test/:id/:path', {
+    id: { type: 'number' },
+    path: {}
+  });
+  const match = matcher.getMatch(new URL('/test/39.448/das', host));
+
+  assertEquals(
+    match?.params?.get('id'),
+    '39.448'
+  );
+
+  assertEquals(
+    match?.params?.get('path'),
+    'das'
+  );
+})
+
 Deno.test('KeyMatch can resolve rest of url for match', () => {
   const matcher = new KeyMatch('/test/:id/:path', {
     id: {},
@@ -84,18 +102,27 @@ Deno.test('KeyMatch can resolve rest of url for match', () => {
   });
 
   assertEquals(
-    matcher.getMatch(new URL('/test/39.448/das', host))?.params?.get('id'),
-    '39.448'
-  );
-
-  assertEquals(
-    matcher.getMatch(new URL('/test/39.448/das', host))?.params?.get('path'),
-    'das'
-  );
-
-  assertEquals(
     matcher.getMatch(new URL('/test/39.448/das/is/wonder1-women', host))?.params?.get('path'),
     'das/is/wonder1-women'
+  );
+})
+
+
+Deno.test('KeyMatch can use custom types', () => {
+  const matcher = new KeyMatch('/test-as2-2/:id', {
+    id: {
+      describe: {
+        pattern: '([a-z]{1})',
+        transform: (v: string) => v.toUpperCase()
+      }
+    },
+  });
+  const match = matcher.getMatch(new URL('/test-as2-2/a', host));
+  assertEquals(!!match, true);
+
+  assertEquals(
+    match?.params?.get('id'),
+    'A'
   );
 
 })

@@ -1,7 +1,7 @@
 /**
  * Main example file to see how it works
  */
-import {EMethod, IServerConfig, Api, Route, RequestError, KeyMatch} from '../mod.ts';
+import {EMethod, IServerConfig, Api, Route, RequestError, KeyMatch, EPatternTypes} from '../mod.ts';
 
 import statusRoute from '../src/presets/routes/status.ts';
 import healthzRoute from '../src/presets/routes/healthz.ts';
@@ -122,7 +122,7 @@ api
 
         // and describe uri params
         {
-          id: {type: Number},
+          id: {type: EPatternTypes.NUMBER}, // you can use 'Number' as string
           name: {}
         }
       ))

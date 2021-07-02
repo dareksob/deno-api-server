@@ -56,9 +56,10 @@ export interface IMatcher {
 }
 
 export interface IKeyDescribe {
-    type?: any,
+    type?: string,
+    describe?: IPatternDescribe,
     key?: string,
-    transform?: Function,
+    transform?: (v: string) => any,
 }
 
 export interface IKeyDescribes {
@@ -78,7 +79,7 @@ export interface IContext {
 export type IPipe = (context: IContext) => void;
 
 export interface IPatternDescribe {
-    pattern: string,
+    readonly pattern: string,
     transform: (v: string) => any,
 }
 

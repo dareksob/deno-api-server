@@ -4,7 +4,7 @@ An http/rest api server for deno. Based on std deno http library and use the con
 - [API Documentation](https://doc.deno.land/https/deno.land/x/deno_api_server/mod.ts)
 - [Preset API Documentation](https://doc.deno.land/https/deno.land/x/deno_api_server/src/presets/mod.ts)
 - [Testing API Documentation](https://doc.deno.land/https/deno.land/x/deno_api_server/dev_mod.ts)
-- [Breaking Changes](./breaking-changes.md)
+- [Release notes](./RELEASE_NOTES.md)
 
 ## Basic functionality example
 
@@ -23,11 +23,6 @@ api.addRoute(
 console.log(`Start server localhost:${api.serverConfig.port}`);
 await api.listen();
 ````
-
-## Last Feature implementations
-- add file handling
-- add functionality for breaking pipe process
-- add new example to handle files [File example](https://deno.land/x/deno_api_server/example/static-file.ts)
 
 ## More code examples
 
@@ -171,15 +166,31 @@ new KeyMatch('/get/:id', { id: { type: 'number' } }) => not match: /get/hello
 new KeyMatch('/get/:path', { path: { type: 'rest' } }) => match /get/super-dup/megaman, params: { path: 'super-dup/megaman' }
 ````
 
-### Info for KeyMatch
-Use `EPatternTypes` for param type or you can extend it with extendPatternMap function.
-See `src/definition/pattern-map.ts`
-
 ### IKeyDescribe.type
-- `'Any'` for any parameter like string, number and combination
-- `Number` for float and numbers
-- `'Int'` for integer numbers 
 
+A list of `EPatternTypes`
+
+- `Any` for any parameter like string, number and combination
+- `Number` for float and numbers
+- `Int` for integer numbers
+- `Alpha` for alphabetic values
+- `Hash` for hash values
+- `Rest` for rest of the url path
+
+### Custom methode to define a custom param pattern
+Use Property `describe` to define a `IPatternDescribe`
+
+Example:
+````js
+new KeyMatch('/get/:p', { 
+  p: {
+    describe: {
+      pattern: '(a-z){1}',
+      transform: (v: string) => v.toUpperCase()
+    }
+  }
+}) => will match /get/g, params: { p: 'G' }
+````
 
 ## Quick test api server
 ```typescript
