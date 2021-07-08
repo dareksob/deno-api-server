@@ -1,5 +1,10 @@
 # Release notes
 
+## v0.2.2
+- integrate cache control attributes for file pipe as optional parameter
+- optional parameter for filePipe for statuscode
+- add some tests
+
 ## v0.2.1
 - remove extend method for pattern map (`extendPatternMap`)
 - integrate new `describe` attribute for KeyMatch params (example exists)

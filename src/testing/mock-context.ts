@@ -10,7 +10,7 @@ interface ISetting {
     state?: IStateMap
 }
 
-export function mockContext(setting: ISetting) : IContext {
+export function mockContext(setting: ISetting = {}) : IContext {
     let route = <Route> setting?.route;
     let uri = <string> setting?.url;
 

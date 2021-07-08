@@ -29,18 +29,29 @@ const MEDIA_TYPES: Record<string, string> = {
   ".doc": "application/msword",
 };
 
+/**
+ * resolve media type by ext
+ * @param ext
+ */
 export function mediaTypeByExt(ext: string): string | undefined {
   return MEDIA_TYPES[ext];
 }
 
+/**
+ * resolve media type by path
+ * @info not detect if file exists
+ * @param path
+ */
 export function mediaTypeByPath(path: string): string | undefined {
   return MEDIA_TYPES[extname(path)];
 }
 
 interface IOptions {
-  contentType?: string,
-  noThrow?: boolean,
-  continue?: boolean,
+  contentType?: string;
+  noThrow?: boolean;
+  continue?: boolean;
+  cacheControl?: string | number | Date;
+  statusCode?: number;
 }
 
 export default function filePipe(filePath: string, options: IOptions = {}) {
@@ -58,6 +69,27 @@ export default function filePipe(filePath: string, options: IOptions = {}) {
       const contentType = options.contentType ? options.contentType : mediaTypeByPath(filePath);
       if (contentType) {
         response.headers.set('Content-Type', contentType);
+      }
+
+      // option cache control
+      if (options.cacheControl) {
+        const cc = options.cacheControl;
+        let cacheContol = 'public, max-age={x}';
+        if (typeof cc === 'string') {
+          cacheContol = cc as string;
+        }
+        else if (typeof cc === 'number') {
+          cacheContol = cacheContol.replace('{x}', `${cc}`);
+        }
+        else {
+          cacheContol = cacheContol.replace('{x}', `${cc}`);
+        }
+        response.headers.set('Cache-Control', cacheContol);
+      }
+
+      // set respone status code
+      if (options?.statusCode as number > 0) {
+        response.status = options.statusCode as number;
       }
 
       // close file open handler
