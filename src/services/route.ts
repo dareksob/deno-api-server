@@ -1,4 +1,4 @@
-import {IResponse, IPipe, IInjections, IRoute, IContext, IMatcher, BreakPipe} from '../definition/types.ts';
+import {IResponse, IPipe, IInjections, IRoute, IContext, IMatcher, BreakPipe, IStateMap} from '../definition/types.ts';
 import { ServerRequest } from '../deps.ts';
 import { UriMatch } from './matcher/uri-match.ts';
 import { RequestError } from '../errors/request.error.ts';
@@ -6,6 +6,7 @@ import { RequestError } from '../errors/request.error.ts';
 export class Route implements IRoute {
     public readonly methods : string[];
     public readonly matcher : IMatcher;
+    public readonly props : IStateMap = new Map();
     protected pipes : Function[] = [];
     public di: IInjections = {};
     public parent?: any;
@@ -29,6 +30,34 @@ export class Route implements IRoute {
         }
     }
 
+    /**
+     * route props
+     *
+     * @param name
+     * @param value
+     */
+    public prop(name: string, value: any) {
+        this.props.set(name, value);
+        return this;
+    }
+
+    /**
+     * @param name
+     * @param service
+     * @param overridable
+     */
+    public inject(name: string, service: any, overridable: boolean = false) {
+        if(this.di.hasOwnProperty(name) && !overridable) {
+            throw new Error(`Service ${name} already injected`);
+        }
+        this.di[name] = service;
+        return this;
+    }
+
+    /**
+     * injection of service
+     * @param di
+     */
     public injections(di: IInjections) : Route {
         this.di = di;
         return this;

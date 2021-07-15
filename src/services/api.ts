@@ -7,7 +7,7 @@ import {Raw} from "./raw.ts";
 
 export class Api {
     protected server: Server | null = null;
-    protected routes: IRoute[] = [];
+    public routes: IRoute[] = [];
 
     public serverConfig: IServerConfig;
     public forceJsonResponse = true;
