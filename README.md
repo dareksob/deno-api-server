@@ -347,3 +347,4 @@ Use djwt to handle and secure your endpoints, a very simple example to customize
 
 ## links
 [deno](https://deno.land)
+# deno-api-server-swagger-plugin
