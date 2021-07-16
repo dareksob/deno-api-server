@@ -50,8 +50,8 @@ export class KeyMatch implements IMatcher {
             assertType(keyPattern.pattern, 'string', 'Invalid pattern')
             assertType(keyPattern.transform, 'function', 'Invalid transform')
 
-            if (/\(/.test(keyPattern.pattern)) {
-                console.warn('Warning, pattern not define a group');
+            if (!/\(/.test(keyPattern.pattern)) {
+                console.warn(`Warning, pattern not define a group for ${item.type}`);
             }
 
             item.key = itemKey;
