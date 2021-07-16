@@ -78,7 +78,7 @@ new Route(
     new KeyMatch(
         '/get-by-key-name/:id/:name',
         {
-            id: { type: Number },
+            id: { type: 'number' },
             name: {}
         }
     )
