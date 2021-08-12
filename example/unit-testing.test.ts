@@ -2,7 +2,7 @@
  * example how to test your api
  */
 
-import {assertEquals, assertNotEquals, assertThrowsAsync} from "https://deno.land/std/testing/asserts.ts";
+import {assertEquals, assertThrowsAsync} from "https://deno.land/std@0.104.0/testing/asserts.ts";
 import {IContext, RequestError, Route} from '../mod.ts';
 
 // use build-in mocks
