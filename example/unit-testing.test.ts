@@ -3,7 +3,7 @@
  */
 
 import {assertEquals, assertThrowsAsync} from "https://deno.land/std@0.104.0/testing/asserts.ts";
-import {EMethod, IContext, RequestError, Route} from '../mod.ts';
+import {AccessDeniedError, EMethod, IContext, RequestError, Route} from '../mod.ts';
 
 // use build-in mocks
 import {mockApi, mockRequest, mockResponse, mockContext} from '../dev_mod.ts';
@@ -220,4 +220,18 @@ Deno.test('Testing for module injetion in routes', async () => {
     assertEquals(api.lastRoute === route, true);
     assertEquals(api?.lastContext?.response.body, { out: 'mockedX' });
     assertEquals(api?.lastContext?.response.status, 200);
+});
+
+Deno.test('Testing api mocked status code', async () => {
+    const routeUrl = '/testing/di';
+    const routeMethod = EMethod.GET;
+
+    const route = new Route(routeMethod, routeUrl);
+    route.addPipe(() => new AccessDeniedError('403 error'));
+
+    const api = mockApi(route);
+    await api.sendByArguments(routeMethod, routeUrl);
+
+    assertEquals(api.lastRoute === route, true);
+    assertEquals(api?.lastContext?.response.status, 403);
 });
