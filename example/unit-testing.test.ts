@@ -227,7 +227,9 @@ Deno.test('Testing api mocked status code', async () => {
     const routeMethod = EMethod.GET;
 
     const route = new Route(routeMethod, routeUrl);
-    route.addPipe(() => new AccessDeniedError('403 error'));
+    route.addPipe(() => {
+        throw new AccessDeniedError('403 error');
+    });
 
     const api = mockApi(route);
     await api.sendByArguments(routeMethod, routeUrl);
