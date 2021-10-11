@@ -62,7 +62,7 @@ export class MockApi extends Api {
         try {
             if (route) {
                 const currentInjections = { ...route.di };
-                Object.assign(route.di, this.injections);
+                route.di = Object.assign({}, route.di, this.injections);
 
                 this.lastContext = await route.execute(url, request, response);
 

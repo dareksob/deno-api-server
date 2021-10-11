@@ -2,8 +2,8 @@
  * example how to test your api
  */
 
-import {assertEquals, assertNotEquals, assertThrowsAsync} from "https://deno.land/std/testing/asserts.ts";
-import {IContext, RequestError, Route} from '../mod.ts';
+import {assertEquals, assertThrowsAsync} from "https://deno.land/std@0.104.0/testing/asserts.ts";
+import {AccessDeniedError, EMethod, IContext, RequestError, Route} from '../mod.ts';
 
 // use build-in mocks
 import {mockApi, mockRequest, mockResponse, mockContext} from '../dev_mod.ts';
@@ -199,3 +199,41 @@ Deno.test('Example for testing custom pipes', async () => {
 
     assertEquals(context.response.headers.get('custom'), 'xxxx');
 })
+
+import * as diTestServices from './fixtures/service-x.ts';
+Deno.test('Testing for module injetion in routes', async () => {
+    const routeUrl = '/testing/di';
+    const routeMethod = EMethod.GET;
+
+    const route = new Route(routeMethod, routeUrl);
+    route.injections(diTestServices);
+    route.addPipe(({response, di}) => response.body = {out: di.serviceX()})
+
+    const api = mockApi(route);
+    api.mockInjections({
+        serviceX: () => 'mockedX'
+    })
+
+    const request = mockRequest(routeMethod, routeUrl);
+    await api.sendByRequest(request);
+
+    assertEquals(api.lastRoute === route, true);
+    assertEquals(api?.lastContext?.response.body, { out: 'mockedX' });
+    assertEquals(api?.lastContext?.response.status, 200);
+});
+
+Deno.test('Testing api mocked status code', async () => {
+    const routeUrl = '/testing/di';
+    const routeMethod = EMethod.GET;
+
+    const route = new Route(routeMethod, routeUrl);
+    route.addPipe(() => {
+        throw new AccessDeniedError('403 error');
+    });
+
+    const api = mockApi(route);
+    await api.sendByArguments(routeMethod, routeUrl);
+
+    assertEquals(api.lastRoute === route, true);
+    assertEquals(api?.lastContext?.response.status, 403);
+});

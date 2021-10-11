@@ -1,6 +1,6 @@
 import {IContext, BreakPipe} from "../../../definition/types.ts";
 import {NotFoundError} from "../../../errors/not-found.error.ts";
-import {extname} from 'https://deno.land/std@0.100.0/path/mod.ts';
+import {extname} from 'https://deno.land/std@0.104.0/path/mod.ts';
 import {Raw} from "../../../services/raw.ts";
 
 const MEDIA_TYPES: Record<string, string> = {

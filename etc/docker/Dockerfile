@@ -1,4 +1,4 @@
-FROM denoland/deno:alpine-1.11.0
+FROM denoland/deno:alpine-1.13.0
 
 ARG CI_TAG
 ARG CI_SHA
