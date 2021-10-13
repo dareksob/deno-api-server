@@ -8,8 +8,8 @@ services:
             - ../../:/app
         entrypoint: /bin/sh /app/etc/bin/start
 
-    deno-1.13.0:
-        image: denoland/deno:alpine-1.13.0
+    deno-1.14.2:
+        image: denoland/deno:alpine-1.14.2
         working_dir: /app
         environment:
             - APP_ENV=development
