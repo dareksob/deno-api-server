@@ -41,3 +41,18 @@ patternMap.set(EPatternTypes.REST, {
     pattern: '(.*)$',
     transform: (v: string) => v,
 });
+
+// add aliases
+[
+    [EPatternTypes.ANY, 'any'],
+    [EPatternTypes.ALPHA, 'alpha'],
+    [EPatternTypes.NUMBER, 'number'],
+    [EPatternTypes.INT, 'int'],
+    [EPatternTypes.REST, 'rest'],
+    [EPatternTypes.REST, '*'],
+].forEach(conf => {
+    const [key, alias] = conf;
+    if (patternMap.has(key)) {
+        patternMap.set(alias, patternMap.get(key) as IPatternDescribe)
+    }
+});
