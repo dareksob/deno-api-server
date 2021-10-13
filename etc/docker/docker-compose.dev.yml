@@ -1,23 +1,18 @@
 services:
-    dev:
-        image: deno-api-server
-        build:
-            context: ../..
-            dockerfile: etc/docker/Dockerfile
-        ports:
-            - 8080:8080
+    deno-1.13.0:
+        image: denoland/deno:alpine-1.13.0
+        working_dir: /app
         environment:
             - APP_ENV=development
-            # - example=authentification-jwt
         volumes:
             - ../../:/app
+        entrypoint: /bin/sh /app/etc/bin/start
 
-    test:
-        image: deno-api-server
-        build:
-            context: ../..
-            dockerfile: etc/docker/Dockerfile
+    deno-1.13.0:
+        image: denoland/deno:alpine-1.13.0
+        working_dir: /app
         environment:
-            - APP_ENV=testing
+            - APP_ENV=development
         volumes:
             - ../../:/app
+        entrypoint: /bin/sh /app/etc/bin/start
