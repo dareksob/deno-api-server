@@ -48,6 +48,7 @@ patternMap.set(EPatternTypes.REST, {
     [EPatternTypes.ALPHA, 'alpha'],
     [EPatternTypes.NUMBER, 'number'],
     [EPatternTypes.INT, 'int'],
+    [EPatternTypes.HASH, 'hash'],
     [EPatternTypes.REST, 'rest'],
     [EPatternTypes.REST, '*'],
 ].forEach(conf => {
