@@ -1,5 +1,14 @@
 # Release notes
 
+## 0.2.7
+integrate new events
+- BEFORE_ROUTE
+- BEFORE_REQUEST
+- ROUTE_NOT_FOUND
+
+## 0.2.3 - 0.2.6
+hotfixes and optimization 
+
 ## v0.2.2
 - integrate cache control attributes for file pipe as optional parameter
 - optional parameter for filePipe for statuscode

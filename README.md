@@ -24,6 +24,20 @@ console.log(`Start server localhost:${api.serverConfig.port}`);
 await api.listen();
 ````
 
+
+## events
+`API_ADD_ROUTE` (RouteEvent)
+will trigger before a new route append to api stack. Tip use this as injection hook for your services
+
+`BEFORE_ROUTE` (RouteEvent)
+will trigger before execute the current route 
+
+`BEFORE_REQUEST` (RequestEvent)
+will trigger before a route are detected and before it execute
+
+`ROUTE_NOT_FOUND` (RequestEvent)
+will trigger if route not match [404]
+
 ## More code examples
 
 ### Add simple route to your api
@@ -322,7 +336,7 @@ More examples in `example/unit-testing.test.ts`
 Tips and best practice to use this server.
 
 - Write custom and small pipes to reuse
-- create a custom createRoute function to setup your app
+- create a custom createRoute function to setup your app or use events to inject services
 - use Route.di / Route.injections to share services and other stuff
 - create factory functions for injections, like getConnection factory to connect to database only if route will execute
 - write test by mock your injections (like mock service for your database connection)

@@ -5,8 +5,9 @@ export { EPatternTypes } from './pattern-map.ts';
 export type IRequest = ServerRequest;
 
 export interface IServerConfig {
-    hostname?: string, 
-    port: number
+    hostname?: string,
+    https?: boolean,
+    port: number,
  }
 
  //@ts-ignore

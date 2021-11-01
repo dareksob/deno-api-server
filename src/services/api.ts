@@ -3,6 +3,7 @@ import { serve, Server, ServerRequest } from "../deps.ts";
 import { RequestError } from "../errors/request.error.ts";
 import {EEvent} from "../definition/event.ts";
 import RouteEvent from "../definition/events/route.event.ts";
+import RequestEvent from "../definition/events/request.event.ts";
 import {Raw} from "./raw.ts";
 
 export class Api {
@@ -20,7 +21,8 @@ export class Api {
     get host() {
         const hostname = this.serverConfig.hostname || 'localhost';
         const port = this.serverConfig.port || 80;
-        return `http://${hostname}:${port}`;
+        const proto = this.serverConfig.https ? 'https' : 'http';
+        return `${proto}://${hostname}:${port}`;
     }
 
     /**
@@ -74,13 +76,17 @@ export class Api {
             };
 
             try {
+                dispatchEvent(new RequestEvent(EEvent.BEFORE_REQUEST, request, response));
+
                 const route = this.getRouteByRequest(request, url);
 
                 if (route) {
+                    dispatchEvent(new RouteEvent(EEvent.BEFORE_ROUTE, route));
                     const context = await route.execute(url, request, response);
                     response = context.response;
                 } else {
                     response.status = 404;
+                    dispatchEvent(new RequestEvent(EEvent.ROUTE_NOT_FOUND, request, response));
                 }
                 
             } catch (e) {
