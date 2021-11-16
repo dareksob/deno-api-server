@@ -84,7 +84,7 @@ Deno.test('KeyMatch can resolve any ', () => {
 
   assertEquals(
     match?.params?.get('id'),
-    '39.448'
+    39.448
   );
 
   assertEquals(

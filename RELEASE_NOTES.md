@@ -1,5 +1,22 @@
 # Release notes
 
+## 0.2.12
+Integrate plugin swagger and refactorings
+
+## 0.2.11
+Bugfixes
+
+## 0.2.10
+Bugfixes and upgrade sources
+
+## 0.2.9
+Add more event types for route
+- API_ADD_ROUTE
+- AFTER_ROUTE_RESPONSE
+
+## 0.2.8
+Bugfixes
+
 ## 0.2.7
 integrate new events
 - BEFORE_ROUTE

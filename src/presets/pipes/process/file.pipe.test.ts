@@ -1,4 +1,4 @@
-import {assertEquals} from '../../../dev_deps.ts';
+import {assertEquals, assertMatch} from '../../../dev_deps.ts';
 import {mockContext} from '../../../testing/mock-context.ts';
 import {default as filePipe, mediaTypeByExt, mediaTypeByPath} from './file.pipe.ts';
 import {BreakPipe} from "../../../definition/types.ts";
@@ -51,7 +51,7 @@ Deno.test('filePipe should catch exceptions', async () => {
 
   assertEquals(returnValue, undefined);
   assertEquals(ctx.state.has('fileError'), true);
-  assertEquals(ctx.state.get('fileError').message, 'No such file or directory (os error 2)');
+  assertMatch(ctx.state.get('fileError').message, /No such file or directory/);
 });
 
 Deno.test('filePipe contine the pipe process', async () => {
