@@ -2,6 +2,7 @@
 
 ## 0.2.12
 Integrate plugin swagger and refactorings
+update swagger plugin with definitions by prop
 
 ## 0.2.11
 Bugfixes

@@ -21,12 +21,11 @@ const route = new Route(EMethod.GET, '/test')
 await swaggerPlugin(api, {
   info: {
     title: 'my api',
-    description: 'my api for your'
+    description: 'my api for your',
+    version: '0.0.0'
   }
 });
 
 // start server and to to the location and resolve the default endpoint /swagger.json
 
 ````
-
-See [deno](https://deno-land) or [source readme](src/README.md) readme for more details.

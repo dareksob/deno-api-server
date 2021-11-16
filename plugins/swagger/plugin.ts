@@ -31,8 +31,16 @@ interface ISwaggerTag {
 
 const validSchemaTypes = ['string', 'array', 'object', 'integer', 'number'];
 
+interface ISwaggerParameterSchemaRef {
+    $ref: string;
+}
 interface ISwaggerParameterSchema {
     type: string,
+    format?: string,
+    description?: string,
+    enum?: string[],
+    default?: unknown,
+    properties?: Record<string, ISwaggerParameterSchema>,
 }
 
 interface ISwaggerRouteParameter {
@@ -42,8 +50,10 @@ interface ISwaggerRouteParameter {
     required: boolean,
     style?: 'form' | 'json',
     explode?: boolean,
-    schema: ISwaggerParameterSchema
+    schema: ISwaggerParameterSchema | ISwaggerParameterSchemaRef,
 }
+
+type TSwaggerDefinition = Record<string, ISwaggerParameterSchema>;
 
 interface ISwaggerPath {
     tags: string[],
@@ -56,7 +66,7 @@ interface ISwaggerPath {
 const validPathProps = ['summary', 'description', 'operationId' ];
 
 interface ISwaggerResponse {
-    description: string
+    description: string;
 }
 
 type TSwaggerResponses = Record<string, ISwaggerResponse>;
@@ -73,6 +83,7 @@ interface IConfig {
     tags?: ISwaggerTag[],
     basePath?: string,
     allowSwaggerRoutes?: boolean,
+    definitions?: TSwaggerDefinition,
 }
 
 /**
@@ -100,6 +111,9 @@ export default function plugin(api: Api, config: IConfig) {
     servers.push({ url: api.host });
 
     jsonEndpointRoute.addPipe(async ({response}) => {
+        const definitions: TSwaggerDefinition = {
+            ...config?.definitions
+        };
         const paths: TSwaggerPaths = {};
 
         api.routes.forEach((route: IRoute) => {
@@ -197,6 +211,7 @@ export default function plugin(api: Api, config: IConfig) {
             tags: config.tags,
             servers,
             paths,
+            definitions,
         }
     });
 
