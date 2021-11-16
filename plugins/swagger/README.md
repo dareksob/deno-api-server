@@ -1,31 +1,32 @@
 # deno-api-server swagger plugin
+
 Plugin for `deno-api-server` to create a swagger json definition endpoint.
 
 Status `WIP`
 
 ## Integration
+
 `/swagger.json` to get the swagger format file
 
-````ts
+```ts
 const api = new Api({}); // deno api server
 // add routes or other stuff
 
-const route = new Route(EMethod.GET, '/test')
+const route = new Route(EMethod.GET, "/test")
   // add swagger route details as prop
-  .prop('swagger', {
-    tags: ['bunny'],
-    summary: 'you get some data'
+  .prop("swagger", {
+    tags: ["bunny"],
+    summary: "you get some data",
   });
 
 // init swagger plugin
 await swaggerPlugin(api, {
   info: {
-    title: 'my api',
-    description: 'my api for your',
-    version: '0.0.0'
-  }
+    title: "my api",
+    description: "my api for your",
+    version: "0.0.0",
+  },
 });
 
 // start server and to to the location and resolve the default endpoint /swagger.json
-
-````
+```

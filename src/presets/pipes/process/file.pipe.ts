@@ -1,7 +1,7 @@
-import {IContext, BreakPipe} from "../../../definition/types.ts";
-import {NotFoundError} from "../../../errors/not-found.error.ts";
-import {extname} from 'https://deno.land/std@0.104.0/path/mod.ts';
-import {Raw} from "../../../services/raw.ts";
+import { BreakPipe, IContext } from "../../../definition/types.ts";
+import { NotFoundError } from "../../../errors/not-found.error.ts";
+import { extname } from "https://deno.land/std@0.104.0/path/mod.ts";
+import { Raw } from "../../../services/raw.ts";
 
 const MEDIA_TYPES: Record<string, string> = {
   ".md": "text/markdown",
@@ -55,7 +55,7 @@ interface IOptions {
 }
 
 export default function filePipe(filePath: string, options: IOptions = {}) {
-  return async ({ request, response, state } : IContext) => {
+  return async ({ request, response, state }: IContext) => {
     try {
       const [file, fileInfo] = await Promise.all([
         Deno.open(filePath),
@@ -66,25 +66,25 @@ export default function filePipe(filePath: string, options: IOptions = {}) {
       response.headers.set("Content-Length", fileInfo.size.toString());
 
       // auto detection of content type if not preset
-      const contentType = options.contentType ? options.contentType : mediaTypeByPath(filePath);
+      const contentType = options.contentType
+        ? options.contentType
+        : mediaTypeByPath(filePath);
       if (contentType) {
-        response.headers.set('Content-Type', contentType);
+        response.headers.set("Content-Type", contentType);
       }
 
       // option cache control
       if (options.cacheControl) {
         const cc = options.cacheControl;
-        let cacheContol = 'public, max-age={x}';
-        if (typeof cc === 'string') {
+        let cacheContol = "public, max-age={x}";
+        if (typeof cc === "string") {
           cacheContol = cc as string;
+        } else if (typeof cc === "number") {
+          cacheContol = cacheContol.replace("{x}", `${cc}`);
+        } else {
+          cacheContol = cacheContol.replace("{x}", `${cc}`);
         }
-        else if (typeof cc === 'number') {
-          cacheContol = cacheContol.replace('{x}', `${cc}`);
-        }
-        else {
-          cacheContol = cacheContol.replace('{x}', `${cc}`);
-        }
-        response.headers.set('Cache-Control', cacheContol);
+        response.headers.set("Cache-Control", cacheContol);
       }
 
       // set respone status code
@@ -96,10 +96,9 @@ export default function filePipe(filePath: string, options: IOptions = {}) {
       request.done.then(() => {
         file.close();
       });
-
     } catch (error) {
       if (options.noThrow) {
-        state.set('fileError', error);
+        state.set("fileError", error);
         return;
       }
       throw new NotFoundError(error.message);
@@ -109,5 +108,5 @@ export default function filePipe(filePath: string, options: IOptions = {}) {
     if (!options.continue) {
       return BreakPipe;
     }
-  }
+  };
 }
