@@ -177,7 +177,7 @@ Deno.test("Example mockApi route to mock injections", async () => {
      * with mock example of route injections
      */
   api.mockInjections({
-    getConnection(name: string) {
+    getConnection() {
       return {
         list() {
           return Promise.resolve(["mocked"]);
