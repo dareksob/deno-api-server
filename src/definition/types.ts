@@ -24,6 +24,7 @@ export interface IResponse {
     message?: string,
     body?: any,
     headers: Headers
+    url: URL
 }
 
 export interface IPipeResponse {

@@ -72,7 +72,7 @@ export class Api {
             const url = this.getUrlByRequest(request);
             let response : IResponse = {
                 status: 200,
-                headers: new Headers()
+                headers: new Headers(),
             };
 
             try {
