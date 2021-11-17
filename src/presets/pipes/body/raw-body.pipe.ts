@@ -1,4 +1,4 @@
-import {IContext} from '../../../definition/types.ts';
+import { IContext } from "../../../definition/types.ts";
 
 // internal decoder
 const decoder = new TextDecoder();
@@ -10,10 +10,10 @@ const decoder = new TextDecoder();
  *
  * @param context
  */
-export default async function rawBodyPipe({ request, state } : IContext) {
+export default async function rawBodyPipe({ request, state }: IContext) {
   const body = await Deno.readAll(request.body);
   const rawBody = decoder.decode(body);
 
-  state.set('body', rawBody);
-  state.set('bodyType', 'raw');
+  state.set("body", rawBody);
+  state.set("bodyType", "raw");
 }
