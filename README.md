@@ -267,7 +267,7 @@ Set state `body` with string data Set state `bodyType` with the type of data ==
 raw
 
 ```typescript
-import rawBodyPipe from "https://deno.land/x/deno_api_server/src/presets/raw-body.pipe.ts";
+import rawBodyPipe from "https://deno.land/x/deno_api_server/src/presets/pipes/body/raw-body.pipe.ts";
 route
   .addPipe(rawBodyPipe)
   .addPipe(({ state }: IContext) => {
@@ -283,7 +283,7 @@ Set state `body` with json data Set state `bodyType` with the type of data ==
 json
 
 ```typescript
-import jsonBodyPipe from "https://deno.land/x/deno_api_server/src/presets/json-body.pipe.ts";
+import jsonBodyPipe from "https://deno.land/x/deno_api_server/src/presets/pipes/body/json-body.pipe.ts";
 route
   .addPipe(jsonBodyPipe)
   .addPipe(({ state }: IContext) => {
@@ -297,7 +297,7 @@ Redirect pipe with default 302 redirection to your url. Basic implementation to
 redirect your route.
 
 ```typescript
-import redirectPipe from "https://deno.land/x/deno_api_server/src/process/redirect.pipe.ts";
+import redirectPipe from "https://deno.land/x/deno_api_server/src/presets/pipes/process/redirect.pipe.ts";
 route
   .addPipe(redirectPipe("/other-page"));
 ```
@@ -305,7 +305,7 @@ route
 If you want to redirect a dynamic page use any capsule pipe function, like here
 
 ```typescript
-import redirectPipe from "https://deno.land/x/deno_api_server/src/process/redirect.pipe.ts";
+import redirectPipe from "https://deno.land/x/deno_api_server/src/presets/pipes/process/redirect.pipe.ts";
 route
   .addPipe((context: IContext) => {
     const url = `/test-to-my?set=1`;
