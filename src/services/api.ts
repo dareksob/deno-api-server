@@ -9,6 +9,7 @@ import { RequestError } from "../errors/request.error.ts";
 import { EEvent } from "../definition/event.ts";
 import RouteEvent from "../definition/events/route.event.ts";
 import RequestEvent from "../definition/events/request.event.ts";
+import ErrorEvent from "../definition/events/error.event.ts";
 import { Raw } from "./raw.ts";
 
 export class Api {
@@ -101,6 +102,10 @@ export class Api {
         }
       } catch (e) {
         this.handleError(response, e);
+    
+        dispatchEvent(
+          new ErrorEvent(EEvent.ROUTE_ERROR, e, { response, request }),
+        );
       }
 
       try {
@@ -123,8 +128,12 @@ export class Api {
       } catch (e) {
         request.respond({
           status: 500,
-          body: e.message,
+          body: e.message || 'Critical error',
         });
+        
+        dispatchEvent(
+          new ErrorEvent(EEvent.CRITICAL_ERROR, e, { response, request }),
+        );
       }
     }
   }
