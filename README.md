@@ -42,6 +42,9 @@ before it execute
 
 `ROUTE_NOT_FOUND` (RequestEvent) will trigger if route not match [404]
 
+`ROUTE_ERROR` Error on route execute [500]
+`CRITICAL_ERROR` Critical error on response execution [500]
+
 ## More code examples
 
 ### Add simple route to your api
