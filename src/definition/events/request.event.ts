@@ -1,8 +1,8 @@
 import { IRequest, IResponse } from "../types.ts";
 
 export default class RequestEvent extends Event {
-  public request: IRequest;
-  public response: IResponse;
+  readonly request: IRequest;
+  readonly response: IResponse;
 
   constructor(type: string, request: IRequest, response: IResponse) {
     super(type);

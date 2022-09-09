@@ -1,22 +1,22 @@
-import { ServerRequest } from "../deps.ts";
 import { Buffer, BufReader } from "../dev_deps.ts";
+
+
+interface IMockOptions {
+  host?: string
+}
 
 /**
  * create server request object for testing
- *
- * @param method
- * @param url
  */
 export function mockRequest(
   method: string,
   url: string,
   data: any = undefined,
-): ServerRequest {
+  options: IMockOptions = {}
+): Request {
   const headers = new Headers();
-  const request = new ServerRequest();
-  request.method = `${method}`.toUpperCase();
-  request.url = url;
-  request.headers = headers;
+  // deno-lint-ignore no-explicit-any
+  let body: any;
 
   // json data
   if (data && typeof data === "object") {
@@ -27,9 +27,12 @@ export function mockRequest(
   // set body data
   if (typeof data === "string") {
     headers.set("content-length", `${data.length}`);
-    const buffer = new Buffer(new TextEncoder().encode(data));
-    request.r = new BufReader(buffer);
+    body = data;
   }
 
-  return request;
+  return new Request(new URL(url, options.host ?? 'http://localhost'), { 
+    method: `${method}`.toUpperCase(), 
+    headers,
+    body,
+   });
 }

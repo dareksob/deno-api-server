@@ -1,6 +1,5 @@
 import { IContext } from "../../../definition/types.ts";
 import { RequestError } from "../../../errors/request.error.ts";
-import rawBodyPipe from "./raw-body.pipe.ts";
 
 /**
  * will parse request body to json
@@ -9,14 +8,10 @@ import rawBodyPipe from "./raw-body.pipe.ts";
  *
  * @param context
  */
-export default async function jsonBodyPipe(context: IContext) {
-  await rawBodyPipe(context);
-
+export default async function jsonBodyPipe({ state, request }: IContext) {
   try {
-    const { state } = context;
-    const jsonBody = JSON.parse(state.get("body"));
     state.set("bodyType", "json");
-    state.set("body", jsonBody);
+    state.set("body", await request.json());
   } catch (e) {
     throw new RequestError(e.message, 400);
   }

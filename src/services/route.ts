@@ -4,11 +4,11 @@ import {
   IInjections,
   IMatcher,
   IPipe,
+  IRequest,
   IResponse,
   IRoute,
   IStateMap,
 } from "../definition/types.ts";
-import { ServerRequest } from "../deps.ts";
 import { UriMatch } from "./matcher/uri-match.ts";
 import { RequestError } from "../errors/request.error.ts";
 
@@ -103,7 +103,7 @@ export class Route implements IRoute {
      */
   public async execute(
     url: URL,
-    request: ServerRequest,
+    request: IRequest,
     response: IResponse,
   ): Promise<IContext> {
     const match = this.matcher.getMatch(url);

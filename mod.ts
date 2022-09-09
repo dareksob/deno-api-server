@@ -13,6 +13,7 @@ export type {
   IServerConfig,
   IStateMap,
 } from "./src/definition/types.ts";
+export { BreakPipe } from "./src/definition/types.ts";
 export { EEvent } from "./src/definition/event.ts";
 export { default as RouteEvent } from "./src/definition/events/route.event.ts";
 export { default as RequestEvent } from "./src/definition/events/request.event.ts";

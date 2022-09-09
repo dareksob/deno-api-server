@@ -4,8 +4,8 @@
 
 import {
   assertEquals,
-  assertThrowsAsync,
-} from "https://deno.land/std@0.104.0/testing/asserts.ts";
+  assertRejects,
+} from "../src/dev_deps.ts";
 import {
   AccessDeniedError,
   EMethod,
@@ -118,7 +118,7 @@ Deno.test("Route example will throw request error", async () => {
   const request = mockRequest("GET", url.pathname);
   const response = mockResponse();
 
-  assertThrowsAsync(
+  assertRejects(
     () => routeError.execute(url, request, response),
     RequestError,
     "error x",

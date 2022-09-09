@@ -58,11 +58,11 @@ export default function filePipe(filePath: string, options: IOptions = {}) {
   return async ({ request, response, state }: IContext) => {
     try {
       const [file, fileInfo] = await Promise.all([
-        Deno.open(filePath),
+        Deno.open(filePath, { read: true }),
         Deno.stat(filePath),
       ]);
 
-      response.body = new Raw(file);
+      response.body = new Raw(file.readable);
       response.headers.set("Content-Length", fileInfo.size.toString());
 
       // auto detection of content type if not preset
@@ -91,11 +91,6 @@ export default function filePipe(filePath: string, options: IOptions = {}) {
       if (options?.statusCode as number > 0) {
         response.status = options.statusCode as number;
       }
-
-      // close file open handler
-      request.done.then(() => {
-        file.close();
-      });
     } catch (error) {
       if (options.noThrow) {
         state.set("fileError", error);

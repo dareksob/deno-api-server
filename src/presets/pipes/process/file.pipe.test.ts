@@ -1,7 +1,6 @@
 import { assertEquals } from "../../../dev_deps.ts";
 import { mockContext } from "../../../testing/mock-context.ts";
-import {
-  default as filePipe,
+import filePipe, {
   mediaTypeByExt,
   mediaTypeByPath,
 } from "./file.pipe.ts";

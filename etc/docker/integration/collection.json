@@ -1,0 +1,754 @@
+{
+	"info": {
+		"_postman_id": "ee0f83f4-d067-494a-a852-0e0af33cf092",
+		"name": "deno-api-server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "697667"
+	},
+	"item": [
+		{
+			"name": "status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has json\", function () {\r",
+							"    var json = pm.response.json();\r",
+							"    pm.expect(json.status).to.eql(\"OK\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/status",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "HEAD",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/redirect with pass",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has json\", function () {\r",
+							"    var json = pm.response.json();\r",
+							"    pm.expect(json.name).to.eql(\"flex\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/redirect",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"redirect"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/redirect-target",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has json\", function () {\r",
+							"    var json = pm.response.json();\r",
+							"    pm.expect(json.name).to.eql(\"not-set\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/redirect-target",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"redirect-target"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "public/break.html",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is html\", function () {\r",
+							"        pm.expect(pm.response.text()).to.include(\"<html\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"<b>test\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/public/break.html",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"public",
+						"break.html"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "healthz",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/healthz",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"healthz"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/wait",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"It take time test\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"It should be take time\", function () {\r",
+							"    var json = pm.response.json();\r",
+							"    pm.expect(json.begin < json.end).to.eql(true);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/wait",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"wait"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/state",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"before pass to passed\", function () {\r",
+							"    var json = pm.response.json();\r",
+							"    pm.expect(json.before).to.eql(json.passed);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/state",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"state"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"before pass to passed\", function () {\r",
+							"    var json = pm.response.json();\r",
+							"    pm.expect(json.before).to.eql(json.passed);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/state",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"state"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/get-by-key-name valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"has json\", function () {\r",
+							"    var json = pm.response.json();\r",
+							"    pm.expect(json.id).to.eql(121);\r",
+							"    pm.expect(json.name).to.eql(\"any\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/get-by-key-name/121/any",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"get-by-key-name",
+						"121",
+						"any"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/body/json post json",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"has json\", function () {\r",
+							"    var json = pm.response.json();\r",
+							"    pm.expect(json.body).to.eql({pass: \"today\"});\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"pass\": \"today\"}"
+				},
+				"url": {
+					"raw": "http://{{host}}/body/json",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"body",
+						"json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/mixed-hello as post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"has json\", function () {\r",
+							"    var json = pm.response.json();\r",
+							"    pm.expect(json.body).to.eql({pass: \"today\"});\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"pass\": \"today\"}"
+				},
+				"url": {
+					"raw": "http://{{host}}/body/json",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"body",
+						"json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/mixed-hello as get",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"has json\", function () {\r",
+							"    var json = pm.response.json();\r",
+							"    pm.expect(typeof json).to.eql(\"object\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"pass\": \"today\"}"
+				},
+				"url": {
+					"raw": "http://{{host}}/mixed-hello",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"mixed-hello"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/process/:file stylesheet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is image/gif\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"text/css\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/process/:file",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"process",
+						":file"
+					],
+					"variable": [
+						{
+							"key": "file",
+							"value": "style.css"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/process/:file gif image",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is image/gif\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"image/gif\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/process/:file",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"process",
+						":file"
+					],
+					"variable": [
+						{
+							"key": "file",
+							"value": "image.gif"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/process/:file not exists but fallback image",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is image/gif\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"image/jpg\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/process/:file",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"process",
+						":file"
+					],
+					"variable": [
+						{
+							"key": "file",
+							"value": "not-exists-banana.txt"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/get-by-key-name valid as post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"has json\", function () {\r",
+							"    var json = pm.response.json();\r",
+							"    pm.expect(json.id).to.eql(151465465);\r",
+							"    pm.expect(json.name).to.eql(\"deno\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/get-by-key-name/151465465/deno",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"get-by-key-name",
+						"151465465",
+						"deno"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/get-by-key-name unknow",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/get-by-key-name/12",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"get-by-key-name",
+						"12"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "localhost:8080",
+			"type": "string"
+		}
+	]
+}

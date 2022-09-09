@@ -1,16 +1,32 @@
-#/bin/bash
+#!/bin/bash
 
-composeFile=./etc/docker/docker-compose.dev.yml
-_cp="docker-compose -f $composeFile"
+#########
+## development env for your project
+##
+## @tip set an alias for dev command line tool in your env `alias d=./dev` for shorthand command in each project
+## @tip add custom scripts to eml by using projecttools eml `p eml extend [name]`
+#########
+dockerFile=etc/docker/docker-compose.dev.yml
+pluginPath=etc/eml/plugin
 
-if [ "$1" == "unit" ]; then
-  $_cp run --rm -e APP_ENV=unit deno-latest
+if [ -f ./env.local.sh ]; then
+  source ./env.local.sh
+fi
 
-elif [ "$1" == "rebuild" ]; then
-    $_cp pull
-    $_cp build
-    $_cp up -d
+subcommand="$1"
 
-else
-  $_cp $@
+source etc/eml/eml.sh
+
+if [ -d $pluginPath ]; then
+  for commadPath in $pluginPath/* 
+  do
+    source $commadPath
+  done
+fi
+
+if [ -f $pluginPath/$subcommand.sh ]; then
+  command=eml-extend-$subcommand
+  eval $command ${@:2}
+else 
+  eml $@
 fi

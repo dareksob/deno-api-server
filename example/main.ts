@@ -9,6 +9,7 @@ import {
   KeyMatch,
   RequestError,
   Route,
+  BreakPipe,
 } from "../mod.ts";
 
 import statusRoute from "../src/presets/routes/status.ts";
@@ -17,8 +18,11 @@ import jsonBodyPipe from "../src/presets/pipes/body/json-body.pipe.ts";
 import redirectPipe from "../src/presets/pipes/process/redirect.pipe.ts";
 import { EEvent } from "../src/definition/event.ts";
 import RouteEvent from "../src/definition/events/route.event.ts";
+import RequestEvent from "../src/definition/events/request.event.ts";
 import filePipe from "../src/presets/pipes/process/file.pipe.ts";
 import htmlPipe from "../src/presets/pipes/process/html.pipe.ts";
+
+console.log(`Init deno api server`, Deno.version);
 
 const serverConfig: IServerConfig = { port: 8080 };
 const api = new Api(serverConfig);
@@ -32,6 +36,14 @@ addEventListener(EEvent.API_ADD_ROUTE, (event) => {
     console.log(`Add Route ${route.methods.join(",")} ${route.matcher.uri}`);
   }
 });
+
+// after route response
+addEventListener(EEvent.AFTER_ROUTE_RESPONSE, event => {
+  if (event instanceof RequestEvent) {
+    const { response, request } = <RequestEvent> event;
+    console.log(`Response ${response.status} for ${request.url} `);
+  }
+})
 
 api
   // add preset route for status info
@@ -56,14 +68,8 @@ api
           noThrow: true,
         })(ctx);
       })
-      // only example you get file error inside state
-      .addPipe(({ state }) => {
-        console.log(state.get("fileError")); // information about last pipe
-      })
       // will return fallback file of not found
-      .addPipe(
-        filePipe(`/app/example/not-found.jpg`, { contentType: "image/jpg" }),
-      ),
+      .addPipe(filePipe(`/app/example/not-found.jpg`, { statusCode: 404, contentType: "image/jpg" })),
   )
   // simple example to response hello for get request
   .addRoute(
@@ -146,16 +152,16 @@ api
   .addRoute(
     new Route(EMethod.GET, "/wait")
       .addPipe(async ({ response, state }) => {
-        state.set("begin", new Date());
+        state.set("begin", Date.now());
         return new Promise((resolve) => {
-          setTimeout(resolve, 1000);
+          setTimeout(resolve, 500);
         });
       })
       .addPipe(({ response, state }) => {
         response.body = {
           message: "Wait a while",
           begin: state.get("begin"),
-          end: new Date(),
+          end: Date.now()
         };
       }),
   )

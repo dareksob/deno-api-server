@@ -1,5 +1,16 @@
 # Release notes
 
+## 1.0.0
+Upgrade to deno version 1.25.2
+Update all std to 0.115.0
+
+`rawBodyPipe` fill state with body string
+`jsonBodyPipe`use native json method
+
+### Depricated
+ServerRequest not more exists, use Request
+Not support for deno 1.14.x and lower
+
 ## 0.2.12
 
 Integrate plugin swagger and refactorings update swagger plugin with definitions

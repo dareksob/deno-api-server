@@ -1,6 +1,15 @@
 services:
-    deno-1.13.0:
-        image: denoland/deno:alpine-1.13.0
+    integration-test:
+        build: ./integration
+        volumes:
+            - ./integration:/app
+        environment:
+            - host=deno-latest:8080
+        depends_on:
+            - deno-latest
+
+    deno-1.15.1:
+        image: denoland/deno:alpine-1.15.1
         working_dir: /app
         environment:
             - APP_ENV=development
@@ -8,20 +17,23 @@ services:
             - ../../:/app
         entrypoint: /bin/sh /app/etc/bin/start
 
-    deno-1.14.2:
-        image: denoland/deno:alpine-1.14.2
-        working_dir: /app
-        environment:
-            - APP_ENV=development
-        volumes:
-            - ../../:/app
-        entrypoint: /bin/sh /app/etc/bin/start
-
-    deno-latest:
+    deno-1.16.1:
         image: denoland/deno:alpine-1.16.1
         working_dir: /app
         environment:
             - APP_ENV=development
+        volumes:
+            - ../../:/app
+        entrypoint: /bin/sh /app/etc/bin/start
+
+
+    deno-latest:
+        image: denoland/deno:alpine-1.25.2
+        working_dir: /app
+        environment:
+            - APP_ENV=development
+        ports:
+            - 8080:8080
         volumes:
             - ../../:/app
         entrypoint: /bin/sh /app/etc/bin/start

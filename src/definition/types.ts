@@ -1,8 +1,6 @@
-import { ServerRequest } from "../deps.ts";
-
 export { EPatternTypes } from "./pattern-map.ts";
 
-export type IRequest = ServerRequest;
+export type IRequest = Request;
 
 export interface IServerConfig {
   hostname?: string;
@@ -41,7 +39,7 @@ export interface IRoute {
   addPipe(pipe: IPipe): IRoute;
   execute(
     url: URL,
-    request: ServerRequest,
+    request: IRequest,
     response: IResponse,
   ): Promise<IContext>;
 }

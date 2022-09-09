@@ -4,7 +4,7 @@ import {
   IServerConfig,
   IStateMap,
 } from "../definition/types.ts";
-import { serve, Server, ServerRequest } from "../deps.ts";
+import { serve } from "../deps.ts";
 import { RequestError } from "../errors/request.error.ts";
 import { EEvent } from "../definition/event.ts";
 import RouteEvent from "../definition/events/route.event.ts";
@@ -13,7 +13,6 @@ import ErrorEvent from "../definition/events/error.event.ts";
 import { Raw } from "./raw.ts";
 
 export class Api {
-  protected server: Server | null = null;
   public routes: IRoute[] = [];
 
   public serverConfig: IServerConfig;
@@ -44,7 +43,7 @@ export class Api {
     return this;
   }
 
-  getUrlByRequest(request: ServerRequest): URL {
+  getUrlByRequest(request: Request): URL {
     return new URL(request.url, this.host);
   }
 
@@ -54,7 +53,7 @@ export class Api {
      * @param request
      * @param {URL|null} url
      */
-  public getRouteByRequest(request: ServerRequest, url?: URL): null | IRoute {
+  public getRouteByRequest(request: Request, url?: URL): null | IRoute {
     url = url || this.getUrlByRequest(request);
 
     for (let route of this.routes) {
@@ -71,9 +70,7 @@ export class Api {
      * start server listing on requests
      */
   public async listen() {
-    this.server = serve(this.serverConfig);
-
-    for await (const request of this.server) {
+    const incoming = async (request: Request) => {
       const url = this.getUrlByRequest(request);
       let response: IResponse = {
         status: 200,
@@ -118,24 +115,23 @@ export class Api {
             typeof response.body !== "string" &&
             !response.headers.has("Content-Type")
           ) {
-            // @ts-ignore
             response.headers.set("Content-Type", "application/json");
             response.body = JSON.stringify(response.body);
           }
         }
 
-        request.respond(response);
+        return new Response(response.body, { status: response.status, statusText: response.message, headers: response.headers });
       } catch (e) {
-        request.respond({
-          status: 500,
-          body: e.message || 'Critical error',
-        });
-        
         dispatchEvent(
           new ErrorEvent(EEvent.CRITICAL_ERROR, e, { response, request }),
         );
+        return new Response('', { status: response.status, statusText: e.message || 'Critical error' });
+        
       }
     }
+
+    // start server
+    await serve(incoming, this.serverConfig);
   }
 
   protected handleError(response: IResponse, error: Error) {
