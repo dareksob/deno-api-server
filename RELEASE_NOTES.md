@@ -9,7 +9,7 @@ Update all std to 0.115.0
 
 ### Depricated
 ServerRequest not more exists, use Request
-Not support for deno 1.14.x and lower
+Not support for deno 1.25.x and lower or not testet
 
 ## 0.2.12
 

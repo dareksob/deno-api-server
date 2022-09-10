@@ -2,8 +2,8 @@ eml_doc "unit" "execute unit test"
 function eml-extend-unit() {
   service=deno-latest
 
-  if [ "$2" != "" ]; then
-    service="$2"
+  if [ "$1" != "" ]; then
+    service="$1"
   fi
 
   echo "Run deno unit test env with service $service"

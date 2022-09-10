@@ -8,25 +8,6 @@ services:
         depends_on:
             - deno-latest
 
-    deno-1.15.1:
-        image: denoland/deno:alpine-1.15.1
-        working_dir: /app
-        environment:
-            - APP_ENV=development
-        volumes:
-            - ../../:/app
-        entrypoint: /bin/sh /app/etc/bin/start
-
-    deno-1.16.1:
-        image: denoland/deno:alpine-1.16.1
-        working_dir: /app
-        environment:
-            - APP_ENV=development
-        volumes:
-            - ../../:/app
-        entrypoint: /bin/sh /app/etc/bin/start
-
-
     deno-latest:
         image: denoland/deno:alpine-1.25.2
         working_dir: /app
