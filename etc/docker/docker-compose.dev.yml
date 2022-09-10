@@ -1,8 +1,8 @@
 services:
-    integration-test:
-        build: ./integration
+    e2e:
+        build: ./e2e
         volumes:
-            - ./integration:/app
+            - ./e2e:/app
         environment:
             - host=deno-latest:8080
         depends_on:
