@@ -31,7 +31,7 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
-          deno-version: "~1.15"
+          deno-version: v1.15.x
 
       - name: Cache Dependencies
         run: deno cache src/deps.ts
