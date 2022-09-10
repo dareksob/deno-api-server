@@ -1,6 +1,6 @@
 # Release notes
 
-## 0.3.4
+## 0.4.0
 Upgrade to deno version 1.25.2
 Update all std to 0.115.0
 
