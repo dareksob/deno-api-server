@@ -49,7 +49,7 @@ Deno.test("filePipe should response file", async () => {
     "Body should be a Raw class",
   );
   assertEquals(
-    ctx.response.body.body instanceof Deno.File,
+    ctx.response.body.body instanceof ReadableStream,
     true,
     "Raw body should be an file",
   );
@@ -57,7 +57,7 @@ Deno.test("filePipe should response file", async () => {
   assertEquals(returnValue, BreakPipe);
 
   // close file connection
-  ctx.response.body.body.close();
+  ctx.response.body.body.cancel();
 });
 
 Deno.test("filePipe should catch exceptions", async () => {
@@ -81,5 +81,5 @@ Deno.test("filePipe contine the pipe process", async () => {
   assertEquals(returnValue, undefined);
 
   // close file connection
-  ctx.response.body.body.close();
+  ctx.response.body.body.cancel();
 });
