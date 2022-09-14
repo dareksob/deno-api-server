@@ -1,3 +1,4 @@
 # ignore IDE
 .vcode
 .idea
+.vscode

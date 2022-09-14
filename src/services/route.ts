@@ -10,6 +10,7 @@ import {
   IStateMap,
 } from "../definition/types.ts";
 import { UriMatch } from "./matcher/uri-match.ts";
+import { PatternMatch } from "./matcher/pattern-match.ts";
 import { RequestError } from "../errors/request.error.ts";
 
 export class Route implements IRoute {
@@ -24,7 +25,7 @@ export class Route implements IRoute {
      * @param method
      * @param uri
      */
-  constructor(method: string[] | string, uri: IMatcher | string) {
+  constructor(method: string[] | string, uri: IMatcher | URLPattern | string) {
     // set methods
     if (!Array.isArray(method)) {
       method = [method];
@@ -34,7 +35,11 @@ export class Route implements IRoute {
     // set uri
     if (typeof uri === "string") {
       this.matcher = new UriMatch(uri);
-    } else {
+    } 
+    else if (uri instanceof URLPattern) {
+      this.matcher = new PatternMatch(uri);
+    }
+    else {
       this.matcher = uri;
     }
   }

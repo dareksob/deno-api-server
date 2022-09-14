@@ -48,7 +48,7 @@ export interface IMatch {
   params: IStateMap;
   url: URL;
   uri: string;
-  matches?: RegExpMatchArray;
+  matches?: RegExpMatchArray | URLPatternResult;
 }
 
 export type IMatching = IMatch | null;
