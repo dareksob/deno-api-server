@@ -54,6 +54,21 @@ api
     new Route(EMethod.GET, "/public/break.html")
       .addPipe(htmlPipe("<html><body><b>test</b></body></html>")),
   )
+  // new url pattern matcher
+  .addRoute(
+    new Route(
+      EMethod.GET,
+      new URLPattern({ pathname: '/pattern/:id/:name' })
+    )
+    .addPipe(ctx => {
+      ctx.response.body = {
+        msg: 'url pattern',
+        id: ctx.match.params.id,
+        name: ctx.match.params.name,
+        //getId: ctx.match.params.get('id'),
+      }
+    })
+  )
   // more complex file handling
   .addRoute(
     // complex exable for file pipeline
