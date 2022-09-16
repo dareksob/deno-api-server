@@ -1,6 +1,6 @@
 /**
  * example to integrate Third party library to auth by json web token
- *
+ * @obsolate please use on new version of deno the global Crypto API
  * @see https://deno.land/x/djwt
  */
 import { AccessDeniedError, Api, EMethod, IContext, Route } from "../mod.ts";

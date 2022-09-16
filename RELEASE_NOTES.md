@@ -1,5 +1,11 @@
 # Release notes
 
+## 0.5.0
+`formBodyPipe` pipe to parse form data
+
+### Depricated
+Obsolate authentification example
+
 ## 0.4.0
 Upgrade to deno version 1.25.2
 Update all std to 0.115.0
@@ -10,6 +16,7 @@ Update all std to 0.115.0
 ### Depricated
 ServerRequest not more exists, use Request
 Not support for deno 1.25.x and lower or not testet
+Obsolate authentification example
 
 ## 0.2.12
 
