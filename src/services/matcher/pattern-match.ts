@@ -20,8 +20,8 @@ export class PatternMatch implements IMatcher {
       return {
         url,
         uri: this.uri,
-        params: match.pathname.groups,
-        matches: match,
+        params: (match as URLPatternResult).pathname.groups,
+        matches: match as URLPatternResult,
       };
     }
 

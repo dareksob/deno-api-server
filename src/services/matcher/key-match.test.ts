@@ -1,29 +1,8 @@
 import { assertEquals, assertNotEquals, assertThrows } from "../../dev_deps.ts";
-import { UriMatch } from "./uri-match.ts";
 import { KeyMatch } from "./key-match.ts";
 import { EPatternTypes } from "../../definition/pattern-map.ts";
 
 const host = "http://localhost";
-Deno.test("UriMatch for basic match", () => {
-  const url = new URL("/test", host);
-  const matcher = new UriMatch("/test");
-
-  assertNotEquals(
-    matcher.getMatch(url),
-    null,
-  );
-
-  const match = matcher.getMatch(url);
-  assertEquals(
-    match?.url.pathname,
-    "/test",
-  );
-
-  assertEquals(
-    match?.uri,
-    "/test",
-  );
-});
 
 Deno.test("KeyMatch key match by typeing", () => {
   const url = new URL("/test/23/sdsd", host);
@@ -40,7 +19,6 @@ Deno.test("KeyMatch key match by typeing", () => {
   );
 
   const match = matcher.getMatch(url);
-  assertEquals(match?.matches?.length, 3);
   assertEquals(match?.params?.get("id"), 23);
   assertEquals(match?.params?.get("name"), "sdsd");
 

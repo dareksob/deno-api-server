@@ -45,10 +45,11 @@ export interface IRoute {
 }
 
 export interface IMatch {
-  params: IStateMap;
+  params: IStateMap
   url: URL;
-  uri: string;
-  matches?: RegExpMatchArray | URLPatternResult;
+  uri: string
+  matches?: RegExpMatchArray | URLPatternResult
+  [key: string]: any
 }
 
 export type IMatching = IMatch | null;
