@@ -1,6 +1,5 @@
 import { assertEquals, assertThrows } from "../dev_deps.ts";
 import { Route } from "./route.ts";
-import { UriMatch } from "./matcher/uri-match.ts";
 import { mockFn, mockRequest } from "../../dev_mod.ts";
 
 const host = "http://localhost";
@@ -9,7 +8,8 @@ Deno.test("Route should be constructable", () => {
   const route = new Route("GET", "/test");
   assertEquals(true, route instanceof Route);
   assertEquals(["GET"], route.methods);
-  assertEquals(route.matcher instanceof UriMatch, true);
+  assertEquals(typeof route.matcher, 'object');
+  assertEquals(typeof route.matcher.getMatch, 'function');
 });
 
 Deno.test("Route should append pipes", async () => {
