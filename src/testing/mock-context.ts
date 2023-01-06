@@ -36,7 +36,7 @@ export function mockContext(setting: ISetting = {}): IContext {
       params: new Map(),
       url: new URL(uri, "http://localhost"),
       uri,
-      matches: [],
+      matches: [] as RegExpMatchArray,
     },
     url: new URL(uri, "http://localhost"),
     request: mockRequest(setting?.method || route.methods[0], uri),

@@ -12,9 +12,8 @@ Deno.test("Access log plugin", async () => {
   const api = mockApi(route);
 
   // install plugin
-  plugin(api, { log });
+  plugin(api);
 
-  
 
   await api.sendByArguments("GET", "/hello");
 

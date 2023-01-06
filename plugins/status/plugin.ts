@@ -1,4 +1,4 @@
-import { Api, EMethod, Route } from "../../mod.ts";
+import { Api, EMethod, Route, IPipe } from "../../mod.ts";
 
 interface IStatusRouteConfig {
   uri?: string;
@@ -38,5 +38,5 @@ export default function plugin(api: Api, config: IConfig = {}) {
     handler: config.handler,
   }
 
-  api.addRoute(createRoute(statusConfig));
+  api.addRoute(createStatusRoute(statusConfig));
 }
