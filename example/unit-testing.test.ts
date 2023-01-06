@@ -5,6 +5,9 @@
 import {
   assertEquals,
   assertRejects,
+  assertCalledCount,
+  assertCalledWith,
+  assertCalledWithAt
 } from "../src/dev_deps.ts";
 import {
   AccessDeniedError,
@@ -15,8 +18,67 @@ import {
 } from "../mod.ts";
 
 // use build-in mocks
-import { mockApi, mockContext, mockRequest, mockResponse } from "../dev_mod.ts";
+import { mockApi, mockContext, mockRequest, mockResponse, mockFn } from "../dev_mod.ts";
 import jsonBodyPipe from "../src/presets/pipes/body/json-body.pipe.ts";
+
+Deno.test('Example who to use util mockFn', async () => {
+  const m = mockFn();
+
+  const route = new Route("GET", "/hello");
+  route.addPipe(() => {
+    m();
+  })
+
+  // create api
+  const api = mockApi(route);
+
+  assertEquals(m.mock.calls.length, 0);
+  await api.sendByArguments("GET", "/hello");
+  assertEquals(api?.lastContext?.response.status, 200);
+
+  assertEquals(m.mock.calls.length, 1);
+})
+
+Deno.test('Example who to use util mockFn with assert funtions', async () => {
+  const m = mockFn();
+
+  assertCalledCount(m, 0);
+
+  m();
+
+  m('hello');
+  m('hello my', 12);
+  
+  assertCalledCount(m, 3);
+  assertCalledWith(m, 1, ['hello']);
+  assertCalledWithAt(m, 1, 0, 'hello');
+})
+
+Deno.test('Example who to use util mockFn as injection', async () => {
+  const say = mockFn();
+
+  const route = new Route("GET", "/hello");
+  route.addPipe(({ di }) => {
+    di.callMe.say('hello');
+  })
+
+  // create api
+  const api = mockApi(route);
+
+  api.mockInjections({
+    callMe: {
+      say
+    }
+  })
+
+  assertEquals(say.mock.calls.length, 0);
+  await api.sendByArguments("GET", "/hello");
+  assertEquals(api?.lastContext?.response.status, 200);
+
+  assertEquals(say.mock.calls.length, 1);
+  // arguments
+  assertEquals(say.mock.calls[0], ['hello']);
+})
 
 /**
  * example by using a api mock

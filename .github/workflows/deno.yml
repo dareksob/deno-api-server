@@ -1,10 +1,4 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# This workflow will install Deno and run tests across stable and nightly builds on Windows, Ubuntu and macOS.
-# For more information see: https://github.com/denolib/setup-deno
+# For more information see: https://github.com/denoland/setup-deno
 
 name: Deno
 
@@ -21,7 +15,7 @@ jobs:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     strategy:
       matrix:
-        deno: ["v1.x", "nightly"]
+        deno: ["v1.x", "v1.25.x", "nightly"]
         os: [macOS-latest, windows-latest, ubuntu-latest]
 
     steps:
@@ -29,9 +23,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Deno
-        uses: denoland/setup-deno@v1
+        uses: ./
         with:
-          deno-version: v1.25.x
+          deno-version: ${{ matrix.deno }}
 
       - name: Cache Dependencies
         run: deno cache src/deps.ts

@@ -3,6 +3,10 @@
 ## 0.6.0
 add access logger method
 
+`assertCalledCount` new testing function for mockFn
+`assertCalledWith` new testing function for mockFn
+`assertCalledWithAt` new testing function for mockFn
+
 ### Depricated
 `preset/healthz` use plugin/healthcheck
 `preset/status` use plugin/status

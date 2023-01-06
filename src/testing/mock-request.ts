@@ -1,6 +1,3 @@
-import { Buffer, BufReader } from "../dev_deps.ts";
-
-
 interface IMockOptions {
   host?: string
 }

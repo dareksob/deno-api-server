@@ -254,11 +254,6 @@ All presets defined in `src/presets`
 
 All presets defined in `src/presets`
 
-### Route presets `src/presets/routes/*`
-
-- `healthz` GET|HEAD /healthz for healthcheck
-- `status` GET /status similar to healthcheck but customizable definitions, see
-  API DOC
 
 ### Pipes presets `src/presets/pipes/*`
 
@@ -411,4 +406,33 @@ your process [validasaur deno.land](https://deno.land/x/djwt)
 
 [deno](https://deno.land)
 
-# deno-api-server-swagger-plugin
+## Plugins
+`info` import the plugin to your api main and regist by call the default function.
+
+```
+import plugin from 'PLUGIN.ts'
+
+const api = new Api();
+plugin(api, { /* plugin configuration */ })
+```
+
+### Swagger json
+use plugins/swagger, but still in WIP
+
+### healthcheck
+use plugins/healthcheck add add this plugin like
+
+`depricated since 0.6.0` preset/health
+
+### status
+use plugins/status to show more details about server status, you can add more details for your endpoint by use body oder the custom handler.
+
+`depricated since 0.6.0` preset/status
+
+
+### access-log `since 0.6.0`
+use plugins/status to show all request actions, optional filtering of checks
+
+
+
+
