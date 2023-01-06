@@ -15,7 +15,6 @@ jobs:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     strategy:
       matrix:
-        deno: ["v1.x", "v1.25.x", "nightly"]
         os: [macOS-latest, windows-latest, ubuntu-latest]
 
     steps:
@@ -25,7 +24,7 @@ jobs:
       - name: Setup Deno        
         uses: denoland/setup-deno@v1
         with:
-          deno-version: ${{ matrix.deno }}
+          deno-version: v1.x
 
       - name: Cache Dependencies
         run: deno cache src/deps.ts
