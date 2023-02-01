@@ -1,5 +1,8 @@
 # Release notes
 
+## 0.6.2
+add more options for plugin access log
+
 ## 0.6.1
 add route plugin
 fix some typescipt issues
