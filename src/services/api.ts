@@ -88,9 +88,7 @@ export class Api {
           dispatchEvent(new RouteEvent(EEvent.BEFORE_ROUTE, route));
           const context = await route.execute(url, request, response);
           response = context.response;
-          dispatchEvent(
-            new RequestEvent(EEvent.AFTER_ROUTE_RESPONSE, request, response),
-          );
+          dispatchEvent(new RequestEvent(EEvent.AFTER_ROUTE_RESPONSE, request, response));
         } else {
           response.status = 404;
           dispatchEvent(

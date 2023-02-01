@@ -429,9 +429,12 @@ use plugins/status to show more details about server status, you can add more de
 
 `depricated since 0.6.0` preset/status
 
-
 ### access-log `since 0.6.0`
 use plugins/status to show all request actions, optional filtering of checks
+
+
+### add-route `since 0.6.1`
+use plugins/add-route to show all route registration by using a custom log handler
 
 
 

@@ -1,5 +1,10 @@
 # Release notes
 
+## 0.6.1
+add route plugin
+fix some typescipt issues
+
+
 ## 0.6.0
 add access logger method
 

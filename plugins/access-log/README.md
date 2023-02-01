@@ -3,7 +3,7 @@
 Plugin for `deno-api-server` to log all access of api
 
 
-## Integra
+## Integration
 
 ```ts
 import plugin from 'deno-api-server/plugins/access-log/plugin.ts';

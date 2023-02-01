@@ -7,7 +7,7 @@ interface IMockOptions {
  */
 export function mockRequest(
   method: string,
-  url: string,
+  uri: string,
   data: any = undefined,
   options: IMockOptions = {}
 ): Request {
@@ -27,8 +27,9 @@ export function mockRequest(
     body = data;
   }
 
-  return new Request(new URL(url, options.host ?? 'http://localhost'), { 
-    method: `${method}`.toUpperCase(), 
+  const url = new URL(uri, options.host ?? 'http://localhost');
+  return new Request(`${url}`,{
+    method: `${method}`.toUpperCase(),
     headers,
     body,
    });

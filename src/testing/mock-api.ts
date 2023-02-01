@@ -10,6 +10,10 @@ import {
 import { mockResponse } from "./mock-response.ts";
 import { RequestError } from "../errors/request.error.ts";
 import { mockRequest } from "../../dev_mod.ts";
+import RequestEvent from "../definition/events/request.event.ts";
+import {EEvent} from "../definition/event.ts";
+import RouteEvent from "../definition/events/route.event.ts";
+import ErrorEvent from "../definition/events/error.event.ts";
 
 interface IErrorContext {
   url: URL;
@@ -65,14 +69,23 @@ export class MockApi extends Api {
     this.lastRoute = route;
 
     try {
+      dispatchEvent(
+          new RequestEvent(EEvent.BEFORE_REQUEST, request, response),
+      );
+
       if (route) {
         const currentInjections = { ...route.di };
         route.di = Object.assign({}, route.di, this.injections);
 
+        dispatchEvent(new RouteEvent(EEvent.BEFORE_ROUTE, route));
         this.lastContext = await route.execute(url, request, response);
+
 
         route.di = currentInjections;
       } else {
+        dispatchEvent(
+            new RequestEvent(EEvent.ROUTE_NOT_FOUND, request, response),
+        );
         throw new RequestError("Not found", 404);
       }
     } catch (e) {
@@ -83,6 +96,10 @@ export class MockApi extends Api {
         request,
         response,
       };
+
+      dispatchEvent(
+          new ErrorEvent(EEvent.ROUTE_ERROR, e, { response, request }),
+      );
     }
   }
 }
